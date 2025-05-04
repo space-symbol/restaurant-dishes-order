@@ -1,87 +1,117 @@
-# Welcome to React Router!
-
-A modern, production-ready template for building full-stack React applications using React Router.
-
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/remix-run/react-router-templates/tree/main/default)
+# Restaurant Dishes Order
+A modern web application for managing restaurant menus, orders, and reviews. Built with React, TypeScript, and a feature-based architecture.
 
 ## Features
 
-- 🚀 Server-side rendering
-- ⚡️ Hot Module Replacement (HMR)
-- 📦 Asset bundling and optimization
-- 🔄 Data loading and mutations
-- 🔒 TypeScript by default
-- 🎉 TailwindCSS for styling
-- 📖 [React Router docs](https://reactrouter.com/)
+- 🍽️ Menu Management
+  - Create, read, update, and delete menu items
+  - Categorize dishes
+  - Manage prices and availability
+
+- 🛒 Shopping Cart
+  - Add/remove items
+  - Real-time price updates
+  - Persistent cart state
+
+- 📝 Order Management
+  - Place new orders
+  - Track order status
+  - View order history
+  - Multiple pickup options
+
+- ⭐ Reviews & Ratings
+  - Leave reviews for dishes
+  - Rate menu items
+  - View aggregated ratings
+
+- 🔐 Authentication
+  - User registration
+  - Secure login
+  - Protected routes
+
+## Tech Stack
+
+- **Frontend Framework:** React 19
+- **Language:** TypeScript
+- **Routing:** React Router 7
+- **State Management:** Zustand
+- **API Client:** Axios
+- **Form Handling:** React Hook Form + Zod
+- **Styling:** Tailwind CSS + Material Tailwind
+- **UI Components:** Radix UI
+- **Testing:** Vitest + Playwright
+- **Build Tool:** Vite
 
 ## Getting Started
 
+### Prerequisites
+
+- Node.js (v18 or higher)
+- npm or yarn
+
 ### Installation
 
-Install the dependencies:
+1. Clone the repository:
+    ```bash
+    # ssh
+    git clone git@gitlab.com:stoleruvadim05/restaurant-dishes-order.git
+    # https
+    git clone https://gitlab.com/stoleruvadim05/restaurant-dishes-order.git
 
-```bash
-npm install
-```
+   cd restaurant-dishes-order
+    ```
 
-### Development
+2. Install dependencies:
+   ```bash
+   npm install
+   # or
+   yarn install
+   ```
 
-Start the development server with HMR:
+3. Start the development server:
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   ```
 
-```bash
-npm run dev
-```
+The application will be available at `http://localhost:3000`.
 
-Your application will be available at `http://localhost:5173`.
+### Available Scripts
 
-## Building for Production
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run start` - Start production server
+- `npm run test` - Run tests
+- `npm run typecheck` - Type checking
 
-Create a production build:
-
-```bash
-npm run build
-```
-
-## Deployment
-
-### Docker Deployment
-
-To build and run using Docker:
-
-```bash
-docker build -t my-app .
-
-# Run the container
-docker run -p 3000:3000 my-app
-```
-
-The containerized application can be deployed to any platform that supports Docker, including:
-
-- AWS ECS
-- Google Cloud Run
-- Azure Container Apps
-- Digital Ocean App Platform
-- Fly.io
-- Railway
-
-### DIY Deployment
-
-If you're familiar with deploying Node applications, the built-in app server is production-ready.
-
-Make sure to deploy the output of `npm run build`
+## Project Structure
 
 ```
-├── package.json
-├── package-lock.json (or pnpm-lock.yaml, or bun.lockb)
-├── build/
-│   ├── client/    # Static assets
-│   └── server/    # Server-side code
+src/
+├── app/              # Application entry points and routing
+├── entities/         # Business entities
+├── features/         # Feature modules
+├── shared/           # Shared utilities and components
+└── widgets/          # UI widgets
 ```
 
-## Styling
+## API Documentation
 
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever CSS framework you prefer.
+API documentation is available in the `api/` directory:
+- `api/openapi-menu-aggregate.yaml` - Main API specification
+- `api/openapi-menu-items.yaml` - Menu items endpoints
+- `api/openapi-menu-orders.yaml` - Orders endpoints
+- `api/openapi-reviews.yaml` - Reviews endpoints
 
----
+## Contributing
 
-Built with ❤️ using React Router.
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.

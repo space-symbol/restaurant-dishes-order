@@ -8,13 +8,6 @@ export const userSchema = z.object({
 
 export type User = z.infer<typeof userSchema>;
 
-export const authResponseSchema = z.object({
-  accessToken: z.string(),
-  user: userSchema,
-});
-
-export type AuthResponse = z.infer<typeof authResponseSchema>;
-
 export const registerSchema = z.object({
   email: z.string().email(),
   password: z.string().min(6),
