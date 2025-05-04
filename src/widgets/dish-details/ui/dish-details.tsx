@@ -1,8 +1,8 @@
-import { StarIcon } from "@heroicons/react/24/solid";
 import { useHasOrderedItem } from "@/features/order/model/hooks/use-has-ordered-item";
-import cn from "@/shared/lib/cn";
 import { mockMenuItems, type MenuItem } from "@/shared/mocks/dishes";
 import { ReviewsSection } from "./reviews-section";
+import { cn } from "@/shared/lib/utils";
+import { StarIcon } from "lucide-react";
 
 interface DishDetailsProps {
   menuId: string;

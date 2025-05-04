@@ -61,6 +61,18 @@ const baseRoutes = [{
           {
             name: "orders",
             path: "/orders",
+          },
+          {
+            name: "menu",
+            path: "/menu",
+          },
+          {
+            name: "reviews",
+            path: "/reviews",
+          },
+          {
+            name: "statistics",
+            path: "/statistics",
           }
         ]
       },
@@ -68,6 +80,28 @@ const baseRoutes = [{
         name: "menu",
         path: "/menu",
       },
+      {
+        name: "dashboard",
+        path: "/dashboard",
+        children: [
+          {
+            name: "menu",
+            path: "/menu",
+          },
+          {
+            name: "reviews",
+            path: "/reviews",
+          },
+          {
+            name: "statistics",
+            path: "/statistics",
+          },
+          {
+            name: "orders",
+            path: "/orders",
+          }
+        ]
+      }
     ],
 }] as const satisfies ReadonlyDeep<BaseRoute[]>;
 

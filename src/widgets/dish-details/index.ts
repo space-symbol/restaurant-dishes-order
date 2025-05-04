@@ -1,1 +1,2 @@
-export { MenuDetails } from './ui/menu-details'; 
+export { DishDetails } from './ui/dish-details'; 
+export { ReviewsSection } from './ui/reviews-section';

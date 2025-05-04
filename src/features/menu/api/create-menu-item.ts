@@ -1,14 +1,8 @@
-import { $api } from "@/shared/api/instance";
-import { createService } from "@/shared/lib/create-service";
-import { menuItemSchema } from "@/entities/menu/model/schemas";
-import { z } from "zod";
+import { createService } from '@/shared/api/create-service';
+import { menuItemSchema, MenuItem, CreateMenuItemDto } from '@/entities/menu';
+import { $api } from '@/shared/api/instance';
 
-const createMenuItemSchema = menuItemSchema.omit({ id: true, createdAt: true, updatedAt: true });
-type CreateMenuItem = z.infer<typeof createMenuItemSchema>;
-type Response = z.infer<typeof menuItemSchema>;
-
-export const createMenuItem = createService(async (data: CreateMenuItem) => {
-  const validatedData = createMenuItemSchema.parse(data);
-  const response = await $api.post<Response>("/v1/menu-items", validatedData);
+export const createMenuItem = createService<CreateMenuItemDto, MenuItem>(async (data) => {
+  const response = await $api.post<MenuItem>('/v1/menu-items', data);
   return menuItemSchema.parse(response.data);
-}); 
+});

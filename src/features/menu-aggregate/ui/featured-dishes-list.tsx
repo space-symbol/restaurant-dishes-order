@@ -1,7 +1,7 @@
 import { CartItem, useCartStore } from "@/entities/cart";
 import { MenuItemWithRating, MenuList } from "@/entities/menu";
 import { Loader } from "@/shared/ui/loader";
-import cn from "@/shared/lib/cn";
+import { cn } from "@/shared/lib/utils";
 import { useMenuItemsWithRatings } from "../model/hooks/use-menu-items-with-ratings";
 
 interface FeaturedDishesListProps {

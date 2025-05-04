@@ -1,6 +1,6 @@
 import { $api } from "@/shared/api/instance";
 import { MenuItemWithReviews } from "@/entities/menu-aggregate/model/types/types";
-import { createService } from "@/shared/lib/create-service";
+import { createService } from "@/shared/api/create-service";
 import { ReviewSort } from "@/entities/review/model/types/types";
 import { z } from "zod";
 

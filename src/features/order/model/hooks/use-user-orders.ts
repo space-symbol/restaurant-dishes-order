@@ -1,16 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
 import { orderKeys } from "../query-keys";
-import { getOrders } from "../../api/get-orders";
+import { getUserOrders } from "../../api/get-user-orders";
 
 interface UseUserOrdersProps {
   sort?: "DATE_ASC" | "DATE_DESC";
   from?: number;
   size?: number;
-} 
+}
 
-export const useUserOrders = ({ sort, from, size }: UseUserOrdersProps) => {
+export const useUserOrders = ({ sort = "DATE_DESC", from = 0, size = 10 }: UseUserOrdersProps = {}) => {
   return useQuery({
-    queryKey: orderKeys.my(),
-    queryFn: async () => await getOrders({ sort, from, size }),
+    queryKey: orderKeys.my({ sort, from, size }),
+    queryFn: () => getUserOrders({ sort, from, size }),
   });
 }; 

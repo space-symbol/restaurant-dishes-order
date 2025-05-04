@@ -1,5 +1,5 @@
 import { $api } from "@/shared/api/instance";
-import { createService } from "@/shared/lib/create-service";
+import { createService } from "@/shared/api/create-service";
 import { loginSchema, userSchema } from "@/entities/auth";
 import { ACCESS_TOKEN_KEY } from "../../lib/consts/local-storage";
 import { useAuthStore } from "@/entities/auth";

@@ -3,6 +3,8 @@ import { useState } from "react";
 import { MenuItemCard } from "@/entities/menu/ui/menu-item-card";
 import { useMenuItemsWithRatings } from "@/features/menu-aggregate/model/hooks/use-menu-items-with-ratings";
 import { Loader } from "@/shared/ui/loader";
+import { Select } from "@/shared/ui/select";
+import { CATEGORY_OPTIONS, SORT_OPTIONS } from "@/shared/constants/menu-options";
 
 export const MenuList = () => {
   const [category, setCategory] = useState<MenuItemCategory | undefined>();
@@ -40,35 +42,20 @@ export const MenuList = () => {
   return (
     <div className="space-y-4">
       <div className="flex gap-4">
-        <select
+        <Select
           value={category}
-          onChange={(e) => setCategory(e.target.value as MenuItemCategory)}
+          onValueChange={(value) => setCategory(value as MenuItemCategory)}
           className="p-2 border rounded"
-        >
-          <option value="">All Categories</option>
-          <option value="appetizers">Appetizers</option>
-          <option value="main_courses">Main Courses</option>
-          <option value="desserts">Desserts</option>
-          <option value="drinks">Drinks</option>
-        </select>
+          options={CATEGORY_OPTIONS}
+        />
 
-        <select
+        <Select
           value={sort}
-          onChange={(e) => setSort(e.target.value as MenuItemSort | 'RATE_ASC' | 'RATE_DESC')}
+          onValueChange={(value) => setSort(value as MenuItemSort | 'RATE_ASC' | 'RATE_DESC')}
           className="p-2 border rounded"
-        >
-          <option value="">Default</option>
-          <option value="AZ">Name (A-Z)</option>
-          <option value="ZA">Name (Z-A)</option>
-          <option value="PRICE_ASC">Price (Low to High)</option>
-          <option value="PRICE_DESC">Price (High to Low)</option>
-          <option value="DATE_ASC">Date (Oldest)</option>
-          <option value="DATE_DESC">Date (Newest)</option>
-          <option value="RATE_ASC">Rating (Low to High)</option>
-          <option value="RATE_DESC">Rating (High to Low)</option>
-        </select>
+          options={SORT_OPTIONS}
+        />
       </div>
-
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {menuItems.data.map((item) => (
           <MenuItemCard key={item.id} item={item} />

@@ -1,7 +1,5 @@
-import { ReviewSort } from "@/entities/review/model/types/types";
 import { useState, useMemo } from "react";
-import { ReviewList } from "@/entities/review/ui/review-list";
-import { type Review } from "@/entities/review/model/types/types";
+import { type Review, ReviewSort, ReviewList } from "@/entities/review";
 import { Select, type SelectOption } from "@/shared/ui/select";
 
 interface ReviewsSectionProps {

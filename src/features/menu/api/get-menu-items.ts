@@ -1,18 +1,15 @@
-import { $api } from "@/shared/api/instance";
-import { createService } from "@/shared/lib/create-service";
-import { menuItemSchema, menuItemCategorySchema, menuItemSortSchema } from "@/entities/menu/model/schemas";
-import { z } from "zod";
+import { createService } from '@/shared/api/create-service';
+import { menuItemsResponseSchema, MenuItemsResponse } from '@/entities/menu';
+import { $api } from '@/shared/api/instance';
 
-const responseSchema = z.array(menuItemSchema);
-type Response = z.infer<typeof responseSchema>;
+export type GetMenuItemsParams = {
+  category?: 'APPETIZER' | 'MAIN' | 'DESSERT' | 'DRINK';
+  sort?: 'PRICE_ASC' | 'PRICE_DESC' | 'NAME_ASC' | 'NAME_DESC';
+  from?: number;
+  size?: number;
+};
 
-const paramsSchema = z.object({
-  category: menuItemCategorySchema.optional(),
-  sort: menuItemSortSchema.optional(),
+export const getMenuItems = createService<GetMenuItemsParams, MenuItemsResponse>(async (params) => {
+  const response = await $api.get<MenuItemsResponse>('/v1/menu-items', { params });
+  return menuItemsResponseSchema.parse(response.data);
 });
-
-export const getMenuItems = createService(async (params?: z.infer<typeof paramsSchema>) => {
-  const validatedParams = params ? paramsSchema.parse(params) : undefined;
-  const response = await $api.get<Response>("/v1/menu-items", { params: validatedParams });
-  return responseSchema.parse(response.data);
-}); 

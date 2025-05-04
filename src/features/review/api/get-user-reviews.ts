@@ -1,5 +1,5 @@
 import { $api } from "@/shared/api/instance";
-import { createService } from "@/shared/lib/create-service";
+import { createService } from "@/shared/api/create-service";
 import { reviewSchema, reviewPaginationParamsSchema } from "@/entities/review/model/schemas";
 import { z } from "zod";
 

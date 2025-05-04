@@ -1,6 +1,6 @@
 import { $api } from "@/shared/api/instance";
 import { MenuItemWithRating } from "@/entities/menu-aggregate/model/types/types";
-import { createService } from "@/shared/lib/create-service";
+import { createService } from "@/shared/api/create-service";
 import { MenuItemCategory, MenuItemSort } from "@/entities/menu/model/types/types";
 import { z } from "zod";
 import { menuItemWithRatingSchema } from "../model/schemas";

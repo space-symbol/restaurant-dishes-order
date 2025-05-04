@@ -14,6 +14,9 @@ export default [
     ...prefix("/dashboard", [
       route("/", 'routes/dashboard/index.tsx'),
       route("/orders", 'routes/dashboard/orders.tsx'),
+      route("/menu", 'routes/dashboard/menu.tsx'),
+      route("/reviews", 'routes/dashboard/reviews.tsx'),
+      // route("/statistics", 'routes/dashboard/statistics.tsx'),
     ]),
   ]),
   route("/menu/:id", "routes/menu/[id].tsx"),

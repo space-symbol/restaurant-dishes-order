@@ -2,7 +2,7 @@ import { HTMLAttributes, useState } from "react";
 import { MenuItemWithRating } from "../model/types/types";
 import { MenuItemCard } from "./menu-item-card";
 import { Loader } from "@/shared/ui/loader";
-import cn from "@/shared/lib/cn";
+import { cn } from "@/shared/lib/utils";
 
 interface MenuListProps extends HTMLAttributes<HTMLDivElement> {
   items: MenuItemWithRating[];

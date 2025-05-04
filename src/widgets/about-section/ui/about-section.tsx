@@ -1,6 +1,6 @@
 import { Award, Users, Utensils } from "lucide-react";
 import { useIntersectionObserver } from "@/shared/hooks/use-intersection-observer";
-import cn from "@/shared/lib/cn";
+import { cn } from "@/shared/lib/utils";
 
 const features = [
   {

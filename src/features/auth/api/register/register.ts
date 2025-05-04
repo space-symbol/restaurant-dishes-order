@@ -1,5 +1,5 @@
 import { $api } from "@/shared/api/instance";
-import { createService } from "@/shared/lib/create-service";
+import { createService } from "@/shared/api/create-service";
 import { registerSchema } from "@/entities/auth/model/schemas";
 import { z } from "zod";
 

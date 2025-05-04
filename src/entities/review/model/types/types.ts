@@ -5,7 +5,7 @@ export type Review = {
   createdAt: string;
 };
 
-export type ReviewSort = 'DATE_ASC' | 'DATE_DESC';
+export type ReviewSort = 'DATE_ASC' | 'DATE_DESC' | 'RATING_ASC' | 'RATING_DESC';
 
 export type ReviewRating = {
   menuItemId: string;

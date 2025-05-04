@@ -4,7 +4,7 @@ import { CartTotal } from './cart-total'
 import { EmptyCart } from './empty-cart'
 import { CartItem } from './cart-item'
 import { Button } from '@/shared/ui/button'
-import cn from '@/shared/lib/cn'
+import { cn } from '@/shared/lib/utils'
 import { useAppNavigate } from '@/shared/hooks/use-navigate'
 import { routesConfig } from '@/shared/config/routes'
 

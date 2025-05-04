@@ -1,6 +1,6 @@
 import * as SelectPrimitive from '@radix-ui/react-select';
 import { ChevronDownIcon, ChevronUpIcon, CheckIcon } from '@heroicons/react/24/solid';
-import cn from '@/shared/lib/cn';
+import { cn } from '@/shared/lib/utils';
 import { forwardRef } from 'react';
 
 export interface SelectOption {

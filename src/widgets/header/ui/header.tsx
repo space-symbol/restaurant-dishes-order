@@ -1,5 +1,5 @@
 import { CartSwitcher } from "@/features/cart";
-import cn from "@/shared/lib/cn";
+import { cn } from "@/shared/lib/utils";
 import { Link } from "@/shared/ui/link";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";

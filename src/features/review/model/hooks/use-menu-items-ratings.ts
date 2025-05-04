@@ -1,9 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
-import { getMenuItemsRatings } from "../api/get-menu-items-ratings";
+import { getMenuItemsRatings } from "../../api/get-menu-items-ratings";
+import { reviewKeys } from "../query-keys";
 
 export const useMenuItemsRatings = (menuItemIds: string[]) => {
   return useQuery({
-    queryKey: ["menu-items-ratings", menuItemIds],
+    queryKey: reviewKeys.menuItemRatings(menuItemIds),
     queryFn: () => getMenuItemsRatings(menuItemIds),
     enabled: menuItemIds.length > 0,
   });

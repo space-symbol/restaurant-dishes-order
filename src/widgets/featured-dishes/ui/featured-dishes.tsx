@@ -1,4 +1,4 @@
-import cn from "@/shared/lib/cn";
+import { cn } from "@/shared/lib/utils";
 import { useIntersectionObserver } from "@/shared/hooks/use-intersection-observer";
 import { FeaturedDishesList } from "@/features/menu-aggregate";
 

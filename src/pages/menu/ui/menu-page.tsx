@@ -56,14 +56,14 @@ export const MenuPage = () => {
       case "PRICE_DESC":
         return b.price - a.price;
       case "RATING_DESC":
-        return b.averageRating - a.averageRating;
+        return b.rating.averageRating - a.rating.averageRating;
       default:
         return 0;
     }
   });
 
   return (
-    <div className="container-custom py-8">
+    <main className="container-custom py-8">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
         <h1 className="text-2xl sm:text-3xl font-bold">Меню</h1>
         <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
@@ -88,6 +88,6 @@ export const MenuPage = () => {
         showPagination={true}
         itemsPerPage={8}
       />
-    </div>
+    </main>
   );
 }; 

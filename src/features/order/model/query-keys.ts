@@ -4,6 +4,8 @@ export const orderKeys = {
   list: (filters: any) => [...orderKeys.lists(), filters] as const,
   details: () => [...orderKeys.all, 'detail'] as const,
   detail: (id: string) => [...orderKeys.details(), id] as const,
-  byUser: (userId: string) => [...orderKeys.all, 'byUser', userId] as const,
-  my: () => [...orderKeys.all, 'my'] as const,
+  byUser: (userId: string, { from, size }: { from: number; size: number }) => 
+    [...orderKeys.all, 'byUser', userId, { from, size }] as const,
+  my: ({ from, size, sort }: { from: number; size: number; sort: 'DATE_ASC' | 'DATE_DESC' }) => 
+    [...orderKeys.all, 'my', { from, size, sort }] as const,
 }; 

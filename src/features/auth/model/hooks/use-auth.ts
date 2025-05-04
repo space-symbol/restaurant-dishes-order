@@ -1,4 +1,4 @@
-import { ServiceResponse } from "@/shared/lib/create-service";
+import { ServiceResponse } from "@/shared/api/create-service";
 import { useMutation } from "@tanstack/react-query";
 import { register } from "../../api/register/register";
 import { authByEmailAndPassword } from "../../api/auth-by-email-and-password/auth-by-email-and-password";

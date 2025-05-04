@@ -1,7 +1,7 @@
 import { formatCurrency } from "@/shared/lib/currency";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
 import { CartItem } from "@/entities/cart";
-import cn from "@/shared/lib/cn";
+import { cn } from "@/shared/lib/utils";
 
 interface OrderSummaryProps {
   items: CartItem[];

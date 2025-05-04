@@ -2,7 +2,7 @@ import { MenuItemWithRating } from "../model/types/types";
 import { Link } from "@/shared/ui/link";
 import { Button } from "@/shared/ui/button";
 import {  ShoppingCart } from "lucide-react";
-import cn from "@/shared/lib/cn";
+import { cn } from "@/shared/lib/utils";
 import { formatCurrency } from "@/shared/lib/currency";
 import { routesConfig } from "@/shared/config/routes";
 import { Rating } from "@/shared/ui/rating";

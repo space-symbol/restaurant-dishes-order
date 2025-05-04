@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
-import cn from "src/shared/lib/cn";
+import { cn } from "@/shared/lib/utils";
 import { Button } from "src/shared/ui/button";
 import { Input } from "src/shared/ui/input";
 import { z } from "zod";
