@@ -1,0 +1,96 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
+@import './variables';
+@import './animations.css';
+
+@layer base {
+  html,
+  body {
+    @apply min-h-full h-full overflow-hidden box-border w-full bg-background text-foreground font-sans;
+    -webkit-font-smoothing: antialiased;
+    
+    & main {
+      flex-grow: 1;
+    }
+
+    & > div {
+      @apply flex-grow overflow-y-auto scroll-smooth;
+
+      scrollbar-gutter: stable;
+    }
+
+    h1 {
+      @apply text-3xl font-bold mb-4;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+      @apply font-serif;
+    }
+
+    h5, h6 {
+      @apply text-restaurant-gray;
+    }
+  }
+
+  body {
+    @apply flex flex-col h-full flex-grow;
+  }
+
+  @theme {
+    --font-sans: 'Inter', sans-serif;
+    --font-serif: 'Playfair Display', serif;
+  }
+  
+  .container-custom {
+    @apply container px-4 md:px-8 mx-auto max-w-7xl;
+  }
+
+  .section-padding {
+    @apply py-16 md:py-24;
+  }
+
+  .card-hover {
+    @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
+    will-change: transform, box-shadow;
+  }
+
+  .animate-fade-in,
+  .animate-slide-in,
+  .animate-slide-fade-in,
+  .animate-scale-in,
+  .animate-bounce-in,
+  .animate-rotate-in {
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+  }
+}
+
+@layer components {
+  .btn-primary { 
+    @apply bg-restaurant-red text-white hover:bg-restaurant-red/90 py-2 px-6 rounded-md font-medium transition-all duration-200;
+    will-change: background-color;
+  }
+  
+  .btn-secondary {
+    @apply bg-restaurant-peach text-restaurant-dark hover:bg-restaurant-peach/90 py-3 px-6 rounded-md font-medium transition-all duration-200 inline-block;
+    will-change: background-color;
+  }
+}
+
+
+@layer utilities {
+  .text-shadow-sm {
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  }
+  
+  .text-shadow-md {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+  
+  .text-shadow-lg {
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+  }
+}
+

@@ -1,0 +1,73 @@
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif, 
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+
+  /* Common colors */
+  --color-background: hsl(40, 33%, 98%);
+  --color-foreground: hsl(20, 14.3%, 4.1%);
+
+  --color-primary: hsl(359, 77%, 59%);
+  --color-primary-foreground: hsl(0, 0%, 100%);
+
+  --color-secondary: hsl(0, 0%, 100%);  
+  --color-secondary-foreground: var(--color-restaurant-gray);
+
+  --color-accent: hsl(259, 94%, 76%);
+  --color-accent-foreground: hsl(0, 0%, 100%);
+
+  --color-success: hsl(142, 84%, 59%);
+  --color-success-foreground: hsl(0, 0%, 100%);
+
+  --color-error: hsl(0, 85%, 51%);
+  --color-error-foreground: hsl(0, 0%, 100%);
+
+  --color-warning: hsl(45, 100%, 50%);
+  --color-warning-foreground: hsl(0, 0%, 100%);
+
+  --color-danger: hsl(0, 84%, 60%);
+  --color-danger-foreground: hsl(0, 0%, 100%);
+
+  --color-info: hsl(217, 91%, 67%);
+  --color-info-foreground: hsl(0, 0%, 100%);
+
+  --color-muted: hsl(60, 4.8%, 95.9%);
+  --color-muted-foreground: hsl(25, 5.3%, 44.7%);
+
+  --color-accent: hsl(12, 80%, 94%);
+  --color-accent-foreground: hsl(24, 9.8%, 10%);
+
+  --color-destructive: hsl(0, 100%, 60.2%);
+  --color-destructive-foreground: hsl(60, 9.1%, 97.8%);
+
+  /* Border */
+  --border: hsl(20, 5.9%, 90%);
+
+  /* Input */
+  --input: hsl(20, 5.9%, 90%);
+
+  /* Ring */
+  --ring: hsl(24, 5.4%, 63.9%);
+
+  --radius: 0.3rem;
+  
+  /* Restaurant */
+  --color-restaurant-red: hsl(353, 82%, 57%);
+  --color-restaurant-orange: hsl(24, 97%, 81%);
+  --color-restaurant-peach: hsl(20, 93%, 91%);
+  --color-restaurant-yellow: hsl(52, 95%, 90%);
+  --color-restaurant-dark: hsl(222, 25%, 14%);
+  --color-restaurant-gray: hsl(216, 4%, 56%);
+          
+  --color-header: hsl(0, 0%, 100%);
+  --color-header-foreground: hsl(0, 0%, 0%);
+
+  /* Header */
+  --height-header: 64px;
+
+  /* Backdrop */
+  --color-backdrop: hsla(0, 0%, 0%, 0.5);
+
+  /* Cart */
+  --color-cart-background: hsl(0, 0%, 100%);
+  --color-cart-foreground: hsl(0, 0%, 0%);
+}

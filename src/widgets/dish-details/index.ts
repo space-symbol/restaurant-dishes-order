@@ -1,0 +1,1 @@
+export { MenuDetails } from './ui/menu-details'; 

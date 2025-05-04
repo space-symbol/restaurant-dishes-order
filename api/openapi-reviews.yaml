@@ -1,0 +1,232 @@
+openapi: 3.0.0
+info:
+  title: Review Service
+  description: |
+    Provides a REST API for CRUD operations with user reviews of dishes. 
+    This service stores data in a PostgreSQL 16 relational database.
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+    description: Local server
+
+paths:
+  /v1/reviews:
+    post:
+      summary: Create a new review
+      description: |
+        Creates a new review. The review information is passed in the request body. User information is extracted from the access token. The dish rating must be from 1 to 5.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - dishId
+                - rating
+                - comment
+              properties:
+                dishId:
+                  type: string
+                  description: ID of the dish being reviewed
+                rating:
+                  type: integer
+                  description: Rating of the dish (1-5)
+                  minimum: 1
+                  maximum: 5
+                comment:
+                  type: string
+                  description: Review comment
+      responses:
+        '201':
+          description: Review successfully created
+        '400':
+          description: Bad request (invalid input)
+        '401':
+          description: Unauthorized (user not authenticated)
+
+  /v1/reviews/{id}:
+    get:
+      summary: Get a review by ID
+      description: Retrieves a specific review by its ID. Available to all users.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the review
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Review details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  reviewId:
+                    type: string
+                  dishId:
+                    type: string
+                  rating:
+                    type: integer
+                  comment:
+                    type: string
+                  createdAt:
+                    type: string
+                    format: date-time
+        '404':
+          description: Review not found
+
+  /v1/reviews/my:
+    get:
+      summary: Get paginated reviews for the current user
+      description: |
+        Retrieves a list of reviews created by the current user. The list is paginated and sorted by creation date.
+      parameters:
+        - name: sortBy
+          in: query
+          required: false
+          description: Sort order for the reviews (DATE_ASC, DATE_DESC)
+          schema:
+            type: string
+            enum: [DATE_ASC, DATE_DESC]
+        - name: from
+          in: query
+          required: false
+          description: Starting point for pagination
+          schema:
+            type: integer
+            default: 0
+        - name: size
+          in: query
+          required: false
+          description: Number of reviews per page
+          schema:
+            type: integer
+            default: 10
+      responses:
+        '200':
+          description: Paginated list of reviews
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    reviewId:
+                      type: string
+                    dishId:
+                      type: string
+                    rating:
+                      type: integer
+                    comment:
+                      type: string
+                    createdAt:
+                      type: string
+                      format: date-time
+        '401':
+          description: Unauthorized (user not authenticated)
+
+  /v1/reviews/menu-items/{id}:
+    get:
+      summary: Get paginated reviews for a specific dish
+      description: |
+        Retrieves a paginated list of reviews for a specific dish. The list is sorted by creation date and includes rating information.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the dish
+          schema:
+            type: string
+        - name: sort
+          in: query
+          required: false
+          description: Sort order for the reviews (DATE_ASC, DATE_DESC)
+          schema:
+            type: string
+            enum: [DATE_ASC, DATE_DESC]
+        - name: from
+          in: query
+          required: false
+          description: Starting point for pagination
+          schema:
+            type: integer
+            default: 0
+        - name: size
+          in: query
+          required: false
+          description: Number of reviews per page
+          schema:
+            type: integer
+            default: 10
+      responses:
+        '200':
+          description: Paginated list of reviews with rating information
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  dishId:
+                    type: string
+                  averageRating:
+                    type: number
+                    format: float
+                  reviews:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        reviewId:
+                          type: string
+                        rating:
+                          type: integer
+                        comment:
+                          type: string
+                        createdAt:
+                          type: string
+                          format: date-time
+        '404':
+          description: Dish not found
+
+  /v1/reviews/ratings:
+    post:
+      summary: Get ratings and average ratings of dishes
+      description: |
+        Returns the ratings and average ratings for a list of dishes. The ratings are calculated using the Wilson Score Confidence Interval.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                dishIds:
+                  type: array
+                  items:
+                    type: string
+                  description: List of dish IDs
+      responses:
+        '200':
+          description: Ratings and average ratings of the dishes
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ratings:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        dishId:
+                          type: string
+                        averageRating:
+                          type: number
+                          format: float
+                          description: Wilson Score Confidence Interval-based rating
+        '400':
+          description: Bad request (invalid input)

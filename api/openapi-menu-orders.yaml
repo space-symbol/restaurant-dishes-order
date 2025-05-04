@@ -1,0 +1,154 @@
+openapi: 3.0.0
+info:
+  title: Orders Service
+  description: |
+    Provides a REST API for creating and viewing orders made by the user.
+    Also integrates with Kafka to send and receive order status updates.
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+    description: Local server
+
+paths:
+  /v1/menu-orders:
+    post:
+      summary: Create an order
+      description: |
+        Creates a new order. The order information is passed in the request body. Available to registered clients of the online cafe. User information is transmitted in the access token.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - items
+                - deliveryAddress
+              properties:
+                items:
+                  type: array
+                  description: List of ordered menu items
+                  items:
+                    type: object
+                    properties:
+                      menuItemId:
+                        type: string
+                        description: ID of the menu item
+                      quantity:
+                        type: integer
+                        description: Quantity of the menu item ordered
+                deliveryAddress:
+                  type: string
+                  description: Address for order delivery
+      responses:
+        '201':
+          description: Order successfully created
+        '400':
+          description: Invalid request or data
+        '401':
+          description: Unauthorized (user not authenticated)
+        '500':
+          description: Internal server error
+
+    get:
+      summary: Get a paginated list of user's orders
+      description: |
+        Retrieves a paginated list of the user's orders. The list is sorted by creation date (DATE_ASC, DATE_DESC). User information is passed in the access token.
+      parameters:
+        - name: sort
+          in: query
+          required: false
+          description: Sort order (DATE_ASC or DATE_DESC)
+          schema:
+            type: string
+            enum: [DATE_ASC, DATE_DESC]
+        - name: from
+          in: query
+          required: false
+          description: Pagination offset
+          schema:
+            type: integer
+        - name: size
+          in: query
+          required: false
+          description: Pagination size (number of items per page)
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: List of orders
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      description: Order ID
+                    items:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          menuItemId:
+                            type: string
+                          quantity:
+                            type: integer
+                    totalAmount:
+                      type: number
+                      format: float
+                      description: Total price of the order
+                    status:
+                      type: string
+                      description: Order status
+                    createdAt:
+                      type: string
+                      format: date-time
+        '401':
+          description: Unauthorized (user not authenticated)
+        '500':
+          description: Internal server error
+
+components:
+  schemas:
+    OrderCreatedEvent:
+      type: object
+      properties:
+        orderId:
+          type: string
+        userId:
+          type: string
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              menuItemId:
+                type: string
+              quantity:
+                type: integer
+        totalAmount:
+          type: number
+          format: float
+        createdAt:
+          type: string
+          format: date-time
+
+    OrderStatusUpdateEvent:
+      type: object
+      properties:
+        orderId:
+          type: string
+        status:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

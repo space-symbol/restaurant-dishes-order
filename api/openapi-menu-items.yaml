@@ -1,0 +1,185 @@
+openapi: 3.0.0
+info:
+  title: Menu Service
+  description: |
+    Provides REST API for CRUD operations with menus. 
+    This service allows employees to create, update, and delete menu items, and offers all users access to retrieve menu items.
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+    description: Local server
+
+paths:
+  /v1/menu-items:
+    post:
+      summary: Create a new dish
+      description: |
+        Creates a new dish. The dish information is passed in the request body. Available for employees, user information is extracted from the access token.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - category
+                - price
+              properties:
+                name:
+                  type: string
+                  description: Name of the dish
+                category:
+                  type: string
+                  description: Category of the dish
+                price:
+                  type: number
+                  format: float
+                  description: Price of the dish
+                available:
+                  type: boolean
+                  description: Availability of the dish (true or false)
+      responses:
+        '201':
+          description: Dish successfully created
+        '400':
+          description: Bad request (invalid input)
+        '401':
+          description: Unauthorized (user not authenticated)
+          
+    get:
+      summary: Get a list of dishes from a specific category
+      description: |
+        Retrieves a list of dishes from the selected category. The list is sorted alphabetically, by price, or by creation date. Available to all users.
+      parameters:
+        - name: category
+          in: query
+          required: false
+          description: Category of the dishes
+          schema:
+            type: string
+        - name: sort
+          in: query
+          required: false
+          description: Sort order for the dishes (AZ, ZA, PRICE_ASC, PRICE_DESC, DATE_ASC, DATE_DESC)
+          schema:
+            type: string
+            enum: [ AZ, ZA, PRICE_ASC, PRICE_DESC, DATE_ASC, DATE_DESC ]
+      responses:
+        '200':
+          description: List of dishes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    name:
+                      type: string
+                    category:
+                      type: string
+                    price:
+                      type: number
+                      format: float
+                    available:
+                      type: boolean
+        '404':
+          description: No dishes found for the specified category
+
+  /v1/menu-items/{id}:
+    delete:
+      summary: Delete a dish by ID
+      description: |
+        Deletes a specific dish by its ID. Available for employees, user information is extracted from the access token.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the dish to delete
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Dish successfully deleted
+        '401':
+          description: Unauthorized (user not authenticated)
+        '404':
+          description: Dish not found
+
+    patch:
+      summary: Update a dish by ID
+      description: |
+        Updates a specific dish by its ID. Update parameters are passed in the request body. Available for employees, user information is extracted from the access token.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the dish to update
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Name of the dish
+                price:
+                  type: number
+                  format: float
+                  description: Updated price of the dish
+                available:
+                  type: boolean
+                  description: Updated availability of the dish
+      responses:
+        '200':
+          description: Dish successfully updated
+        '400':
+          description: Bad request (invalid input)
+        '401':
+          description: Unauthorized (user not authenticated)
+        '404':
+          description: Dish not found
+
+    get:
+      summary: Get a dish by ID
+      description: Retrieves a specific dish by its ID. Available to all users.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the dish to retrieve
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Dish details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  name:
+                    type: string
+                  category:
+                    type: string
+                  price:
+                    type: number
+                    format: float
+                  available:
+                    type: boolean
+                  createdAt:
+                    type: string
+                    format: date-time
+        '404':
+          description: Dish not found
+
+#  /v1/menu-items:

@@ -1,0 +1,1 @@
+export { FeaturedDishes } from './ui/featured-dishes'
