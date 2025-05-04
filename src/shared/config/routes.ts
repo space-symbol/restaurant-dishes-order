@@ -27,7 +27,7 @@ const baseRoutes = [{
         path: "/#about",
       },
       {
-        name: "menu",
+        name: "menuList",
         path: "/#menu",
       },
       {
@@ -63,6 +63,10 @@ const baseRoutes = [{
             path: "/orders",
           }
         ]
+      },
+      {
+        name: "menu",
+        path: "/menu",
       },
     ],
 }] as const satisfies ReadonlyDeep<BaseRoute[]>;

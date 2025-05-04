@@ -22,8 +22,7 @@ const features = [
 
 export const AboutSection = () => {
   const { ref: sectionRef, isVisible: isSectionVisible } = useIntersectionObserver({
-    rootMargin: '100px',
-    threshold: 0.2
+    rootMargin: '20px',
   });
 
   return (
@@ -40,7 +39,7 @@ export const AboutSection = () => {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-12 items-center">
+        <div className="grid xl:grid-cols-2 gap-12 items-center">
           <div className={cn(
             "relative opacity-0",
             isSectionVisible && "animate-bounce-in"

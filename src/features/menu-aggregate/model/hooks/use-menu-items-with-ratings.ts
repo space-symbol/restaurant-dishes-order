@@ -8,6 +8,6 @@ export const useMenuItemsWithRatings = (params?: {
 }) => {
   return useQuery({
     queryKey: ["menu-aggregate", "items", params],
-    queryFn: () => getMenuItemsWithRatings(params),
+    queryFn: async () => await getMenuItemsWithRatings(params),
   });
 }; 

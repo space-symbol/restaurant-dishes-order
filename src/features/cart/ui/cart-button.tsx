@@ -1,7 +1,7 @@
 import { useCartStore, type CartItem } from '@/entities/cart/model/store'
 
 interface CartButtonProps {
-  item: Omit<CartItem, 'quantity'>
+  item: Omit<CartItem, 'quantity' | 'restaurantId'>
 }
 
 export function CartButton({ item }: CartButtonProps) {
@@ -13,7 +13,10 @@ export function CartButton({ item }: CartButtonProps) {
       if (cartItem) {
         updateQuantity(item.id, cartItem.quantity + 1)
       } else {
-        addItem(item)
+        addItem({
+          ...item,
+          restaurantId: '1',
+        })
       }
     } catch (error) {
       if (error instanceof Error) {

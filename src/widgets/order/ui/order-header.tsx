@@ -15,7 +15,7 @@ export const OrderHeader = ({ className }: OrderHeaderProps) => {
       <h1 className="text-2xl font-bold">Оформление заказа</h1>
       <Button
         variant="outline"
-        onClick={() => navigate(routesConfig.home.menu.path)}
+        onClick={() => navigate(routesConfig.home.menuList.path)}
         className="flex items-center gap-2"
       >
         <Plus className="h-4 w-4" />

@@ -3,23 +3,6 @@ import { useAuthStore } from "@/entities/auth";
 import { routesConfig } from "@/shared/config/routes";
 
 export default function DashboardPage() {
-  const { user } = useAuthStore();
-  const isAdmin = user?.role === 'ADMIN';
-
-  if (!isAdmin) {
-    return (
-      <main className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold mb-4">Доступ запрещен</h1>
-          <p className="mb-4">У вас нет прав для доступа к этой странице</p>
-          <Link to={routesConfig.home.path} variant="button">
-            Вернуться на главную
-          </Link>
-        </div>
-      </main>
-    );
-  }
-
   return (
     <main className="min-h-screen">
       <div className="container-custom py-8">

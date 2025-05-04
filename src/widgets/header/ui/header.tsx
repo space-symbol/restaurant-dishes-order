@@ -15,12 +15,13 @@ type NavLink = {
   name: string;
   href: string;
   isPrivate?: boolean;
+  accent?: boolean;
 }
 
 const navLinks: NavLink[] = [
   { name: "Главная", href: routesConfig.home.hero.path },
   { name: "О нас", href: routesConfig.home.about.path },
-  { name: "Меню", href: routesConfig.home.menu.path },
+  { name: "Меню", href: routesConfig.home.menuList.path, accent: true },
   { name: "Контакты", href: routesConfig.home.contact.path },
   { name: "Мои заказы", href: routesConfig.home.orders.path, isPrivate: true },
 ] as const;
@@ -91,13 +92,16 @@ export const Header = ({className}: HeaderProps) => {
       </div>
 
       {mobileMenuOpen && (
-        <nav className="lg:hidden z-50 bg-header border-t absolute top-full left-0 right-0 py-4 shadow-lg animate-fade-in">
-          <div className="container-custom flex flex-col space-y-4">
+        <nav className="lg:hidden z-50 bg-header border-t absolute top-full left-0 right-0 py-3 sm:py-4 shadow-lg animate-fade-in">
+          <div className="container-custom flex flex-col space-y-3 sm:space-y-4">
             {navLinks.map((link) => (
                 <Link 
                   key={link.name}
                   to={link.href} 
-                  className="text-restaurant-dark font-medium py-2"
+                  className={cn(
+                    "text-sm sm:text-base text-restaurant-dark font-medium py-1.5 sm:py-2",
+                    link.accent && "!text-restaurant-red"
+                  )}
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   {link.name}
@@ -106,7 +110,7 @@ export const Header = ({className}: HeaderProps) => {
             {isAdmin && (
               <Link 
                 to={routesConfig.home.dashboard.path}
-                className="text-restaurant-dark font-medium py-2"
+                className="text-sm sm:text-base text-restaurant-dark font-medium py-1.5 sm:py-2"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Панель управления
@@ -119,7 +123,7 @@ export const Header = ({className}: HeaderProps) => {
                   setMobileMenuOpen(false);
                 }} 
                 variant="outline" 
-                className="w-full"
+                className="w-full text-sm sm:text-base"
               >
                 Выйти
               </Button>
@@ -127,7 +131,7 @@ export const Header = ({className}: HeaderProps) => {
               <Link 
                 variant="button"
                 to={routesConfig.home.auth.path}
-                className="text-center"
+                className="text-center text-sm sm:text-base"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Войти

@@ -42,7 +42,7 @@
   }
   
   .container-custom {
-    @apply container px-4 md:px-8 mx-auto max-w-7xl;
+    @apply container px-2 sm:px-4 md:px-8 lg:px-40 2xl:px-16 mx-auto max-w-9xl;
   }
 
   .section-padding {
@@ -64,18 +64,6 @@
     -webkit-backface-visibility: hidden;
     transform: translateZ(0);
     -webkit-transform: translateZ(0);
-  }
-}
-
-@layer components {
-  .btn-primary { 
-    @apply bg-restaurant-red text-white hover:bg-restaurant-red/90 py-2 px-6 rounded-md font-medium transition-all duration-200;
-    will-change: background-color;
-  }
-  
-  .btn-secondary {
-    @apply bg-restaurant-peach text-restaurant-dark hover:bg-restaurant-peach/90 py-3 px-6 rounded-md font-medium transition-all duration-200 inline-block;
-    will-change: background-color;
   }
 }
 

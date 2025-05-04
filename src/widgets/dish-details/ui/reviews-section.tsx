@@ -49,8 +49,8 @@ export const ReviewsSection = ({
     <div className={className}>
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b pb-4">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">Отзывы клиентов</h2>
-          <p className="text-gray-500 mt-1">
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Отзывы клиентов</h2>
+          <p className="text-sm sm:text-base text-gray-500 mt-1">
             {rating} {rating === 1 ? 'отзыв' : 'отзывов'} • Средняя оценка: {averageRating.toFixed(1)}
           </p>
         </div>
@@ -58,7 +58,7 @@ export const ReviewsSection = ({
           value={sort}
           onValueChange={(value) => {
             setSort(value as ReviewSort);
-            setPage(1); // Сбрасываем страницу при изменении сортировки
+            setPage(1);
           }}
           options={sortOptions}
           className="w-full sm:w-48"
@@ -66,9 +66,9 @@ export const ReviewsSection = ({
       </div>
 
       {!hasOrdered && (
-        <div className="mt-6 bg-blue-50 border border-blue-200 rounded-xl p-4 text-blue-700">
+        <div className="mt-6 bg-blue-50 border border-blue-200 rounded-xl p-3 sm:p-4 text-sm sm:text-base text-blue-700">
           <p className="font-medium">Хотите поделиться своим мнением?</p>
-          <p className="mt-1 text-sm">Закажите это блюдо, чтобы оставить отзыв и помочь другим клиентам с выбором.</p>
+          <p className="mt-1">Закажите это блюдо, чтобы оставить отзыв и помочь другим клиентам с выбором.</p>
         </div>
       )}
 

@@ -1,3 +1,4 @@
+import { routesConfig } from "@/shared/config/routes"
 import { Link } from "@/shared/ui/link"
 import { ChefHat, Package } from "lucide-react"
 
@@ -26,22 +27,14 @@ export const Hero = () => {
           <p className="text-lg md:text-xl mb-8 max-w-2xl text-shadow-sm opacity-0 animate-fade-in" style={{ animationDelay: "0.6s" }}>
             Не ждите! Закажите любимые блюда онлайн и заберите их в удобное для вас время. Свежие, горячие и готовые к подаче.
           </p>
-          
-          <div className="flex flex-wrap gap-4 opacity-0 animate-fade-in" style={{ animationDelay: "0.8s" }}>
-            <a href="#menu" className="btn-primary inline-flex items-center gap-2">
-              <Package size={18} />
-              Заказать с самовывозом
-            </a>
-            <Link to="#menu" className="bg-white/20 backdrop-blur-sm text-white hover:bg-white/30 py-3 px-6 rounded-md font-medium transition-all duration-200 inline-flex items-center gap-2">
-              <ChefHat size={18} />
-              Посмотреть Меню
-            </Link>
-          </div>
+          <Link to={routesConfig.home.menuList.path} variant={"buttonSecondary"}>
+            <ChefHat size={18} />
+            Посмотреть Меню
+          </Link>
         </div>
       </div>
-      
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
-        <a href="#menu" className="text-white/80 hover:text-white transition-colors">
+        <Link to={routesConfig.home.menuList.path} variant="buttonSecondary">
           <svg 
             xmlns="http://www.w3.org/2000/svg" 
             width="24" 
@@ -55,9 +48,8 @@ export const Hero = () => {
           >
             <path d="m6 9 6 6 6-6"/>
           </svg>
-        </a>
+        </Link>
       </div>
-      
       <div 
         className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-background to-transparent"
       />

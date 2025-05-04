@@ -12,7 +12,7 @@ export const EmptyCart = ({ className }: EmptyCartProps) => {
   return (
     <div className={`text-center py-12 ${className}`}>
       <p className="text-gray-500 mb-4">Ваша корзина пуста</p>
-      <Button onClick={() => navigate(routesConfig.home.menu.path)}>
+      <Button onClick={() => navigate(routesConfig.home.menuList.path)}>
         Перейти в меню
       </Button>
     </div>

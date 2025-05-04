@@ -1,10 +1,11 @@
 import type { Route } from "../+types/root";
 import { Link } from "src/shared/ui/link";
 import { AuthForm } from "src/features/auth";
-import { useSearchParams } from "react-router";
+import { Navigate, useSearchParams } from "react-router";
 import { useAuthStore } from "@/entities/auth";
 import { useAppNavigate } from "@/shared/hooks/use-navigate";
-import { useEffect } from "react";
+import { useEffect, useLayoutEffect } from "react";
+import { routesConfig } from "@/shared/config/routes";
 
 
 export function meta({}: Route.MetaArgs) {
@@ -20,9 +21,9 @@ export default function Auth() {
   const isAuth = useAuthStore((state) => state.isAuthenticated);
   const navigate = useAppNavigate()
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (isAuth) {
-      navigate('/');
+      navigate(routesConfig.home.path)
     }
   }, [isAuth, navigate]);
   
