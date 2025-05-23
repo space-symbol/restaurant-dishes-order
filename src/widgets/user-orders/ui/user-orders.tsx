@@ -2,20 +2,45 @@ import { useState } from "react";
 import { Button } from "@/shared/ui/button";
 import { OrdersList } from "@/entities/order";
 import { useUserOrders } from "@/features/order";
+import { useNavigate } from "react-router";
+import type { Route } from "@/app/routes/orders/+types/orders";
 
 const DEFAULT_PAGE_SIZE = 10;
 
-export const UserOrders = () => {
+type UserOrdersProps = {
+  initialData: Route.LoaderData;
+};
+
+export const UserOrders = ({ initialData }: UserOrdersProps) => {
   const [sortOrder, setSortOrder] = useState<"DATE_ASC" | "DATE_DESC">("DATE_DESC");
   const [currentPage, setCurrentPage] = useState(0);
+  const navigate = useNavigate();
 
   const { data, isLoading } = useUserOrders({
     sort: sortOrder,
     from: currentPage * DEFAULT_PAGE_SIZE,
     size: DEFAULT_PAGE_SIZE,
+  }, {
+    initialData: {
+      data: {
+        orders: initialData.orders,
+        total: initialData.total,
+      }
+    }
   });
 
   const totalPages = data?.data ? Math.ceil(data.data.total / DEFAULT_PAGE_SIZE) : 0;
+
+  const handleSortChange = (newSort: "DATE_ASC" | "DATE_DESC") => {
+    setSortOrder(newSort);
+    setCurrentPage(0);
+    navigate(`?sort=${newSort}&page=0`, { replace: true });
+  };
+
+  const handlePageChange = (newPage: number) => {
+    setCurrentPage(newPage);
+    navigate(`?sort=${sortOrder}&page=${newPage}`, { replace: true });
+  };
 
   return (
     <div className="flex flex-col flex-grow gap-6">
@@ -23,19 +48,13 @@ export const UserOrders = () => {
         <div className="flex gap-2">
           <Button
             variant={sortOrder === "DATE_DESC" ? "primary" : "outline"}
-            onClick={() => {
-              setSortOrder("DATE_DESC");
-              setCurrentPage(0);
-            }}
+            onClick={() => handleSortChange("DATE_DESC")}
           >
             Сначала новые
           </Button>
           <Button
             variant={sortOrder === "DATE_ASC" ? "primary" : "outline"}
-            onClick={() => {
-              setSortOrder("DATE_ASC");
-              setCurrentPage(0);
-            }}
+            onClick={() => handleSortChange("DATE_ASC")}
           >
             Сначала старые
           </Button>
@@ -52,7 +71,7 @@ export const UserOrders = () => {
         <div className="flex justify-center gap-2 mt-4">
           <Button
             variant="outline"
-            onClick={() => setCurrentPage(prev => Math.max(0, prev - 1))}
+            onClick={() => handlePageChange(Math.max(0, currentPage - 1))}
             disabled={currentPage === 0}
           >
             Назад
@@ -62,7 +81,7 @@ export const UserOrders = () => {
           </span>
           <Button
             variant="outline"
-            onClick={() => setCurrentPage(prev => Math.min(totalPages - 1, prev + 1))}
+            onClick={() => handlePageChange(Math.min(totalPages - 1, currentPage + 1))}
             disabled={currentPage === totalPages - 1}
           >
             Вперед

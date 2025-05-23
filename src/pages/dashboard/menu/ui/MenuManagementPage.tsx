@@ -4,26 +4,35 @@ import { deleteMenuItem } from '@/features/menu/api/delete-menu-item';
 import { MenuItem } from '@/entities/menu';
 import { CreateMenuItemForm } from './CreateMenuItemForm';
 import { EditMenuItemForm } from './EditMenuItemForm';
+import type { Route } from './+types/menu-management';
 
-export const MenuManagementPage = () => {
-  const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+export async function loader({ request }: Route.LoaderArgs) {
+  const url = new URL(request.url);
+  const params: GetMenuItemsParams = {
+    category: url.searchParams.get('category') as any || undefined,
+    sort: url.searchParams.get('sort') as any || undefined,
+  };
+  
+  const response = await getMenuItems(params);
+  return { items: response.data?.items ?? [] };
+}
+
+export async function clientLoader({ serverLoader, request }: Route.ClientLoaderArgs) {
+  const serverData = await serverLoader();
+  return serverData;
+}
+
+export function HydrateFallback() {
+  return <div>Loading...</div>;
+}
+
+export default function MenuManagementPage({
+  loaderData,
+}: Route.ComponentProps) {
   const [isCreating, setIsCreating] = useState(false);
   const [editingItem, setEditingItem] = useState<MenuItem | null>(null);
-
-  const fetchMenuItems = useCallback(async (params?: GetMenuItemsParams) => {
-    try {
-      setLoading(true);
-      setError(null);
-      const response = await getMenuItems(params);
-      setMenuItems(response.items);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to fetch menu items');
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const handleDelete = async (id: string) => {
     if (!confirm('Are you sure you want to delete this item?')) {
@@ -33,17 +42,14 @@ export const MenuManagementPage = () => {
     try {
       setLoading(true);
       await deleteMenuItem(id);
-      await fetchMenuItems();
+      // After deletion, we should trigger a revalidation of the route data
+      window.location.reload();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to delete menu item');
     } finally {
       setLoading(false);
     }
   };
-
-  useEffect(() => {
-    fetchMenuItems();
-  }, [fetchMenuItems]);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -72,7 +78,7 @@ export const MenuManagementPage = () => {
             <CreateMenuItemForm
               onSuccess={() => {
                 setIsCreating(false);
-                fetchMenuItems();
+                window.location.reload();
               }}
               onCancel={() => setIsCreating(false)}
             />
@@ -88,7 +94,7 @@ export const MenuManagementPage = () => {
               item={editingItem}
               onSuccess={() => {
                 setEditingItem(null);
-                fetchMenuItems();
+                window.location.reload();
               }}
               onCancel={() => setEditingItem(null)}
             />
@@ -97,7 +103,7 @@ export const MenuManagementPage = () => {
       )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {menuItems.map((item) => (
+        {loaderData.items.map((item) => (
           <div key={item.id} className="border rounded-lg p-4">
             <h2 className="text-xl font-semibold">{item.name}</h2>
             <p className="text-gray-600">{item.description}</p>
@@ -122,4 +128,4 @@ export const MenuManagementPage = () => {
       </div>
     </div>
   );
-}; 
+} 

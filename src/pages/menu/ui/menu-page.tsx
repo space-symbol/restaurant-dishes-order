@@ -3,7 +3,9 @@ import { MenuList } from "@/entities/menu";
 import { CartItem, useCartStore } from "@/entities/cart";
 import { MenuItemWithRating } from "@/entities/menu/model/types/types";
 import { Select, type SelectOption } from "@/shared/ui/select";
-import { MenuItemCategory, MenuItemSort } from "@/entities/menu/model/types/types";
+import { MenuItemCategory } from "@/entities/menu/model/types/types";
+import { getMenuItems } from "@/features/menu/api/get-menu-items";
+import type { Route } from "./+types/menu-page";
 
 const categoryOptions: SelectOption[] = [
   { value: "ALL", label: "Все категории" },
@@ -18,16 +20,38 @@ const sortOptions: SelectOption[] = [
   { value: "NAME_DESC", label: "По названию (Я-А)" },
   { value: "PRICE_ASC", label: "По цене (возр.)" },
   { value: "PRICE_DESC", label: "По цене (убыв.)" },
-  { value: "RATING_DESC", label: "По рейтингу" },
 ];
 
-export const MenuPage = () => {
-  const [category, setCategory] = useState<MenuItemCategory | "ALL">("ALL");
-  const [sort, setSort] = useState<MenuItemSort>("NAME_ASC");
-  const { addItem } = useCartStore();
+type MenuSort = 'PRICE_ASC' | 'PRICE_DESC' | 'NAME_ASC' | 'NAME_DESC';
 
-  // TODO: Заменить на реальные данные из API
-  const mockItems: MenuItemWithRating[] = [];
+export async function loader({ request }: Route.LoaderArgs) {
+  const url = new URL(request.url);
+  const category = url.searchParams.get('category') as MenuItemCategory | null;
+  const sort = url.searchParams.get('sort') as MenuSort | null;
+  
+  const response = await getMenuItems({
+    category: category || undefined,
+    sort: sort || undefined,
+  });
+  
+  return { items: response.data?.items ?? [] };
+}
+
+export async function clientLoader({ serverLoader, request }: Route.ClientLoaderArgs) {
+  const serverData = await serverLoader();
+  return serverData;
+}
+
+export function HydrateFallback() {
+  return <div>Loading...</div>;
+}
+
+export default function MenuPage({
+  loaderData,
+}: Route.ComponentProps) {
+  const [category, setCategory] = useState<MenuItemCategory | "ALL">("ALL");
+  const [sort, setSort] = useState<MenuSort>("NAME_ASC");
+  const { addItem } = useCartStore();
 
   const handleAddToCart = (item: MenuItemWithRating) => {
     const cartItem: CartItem = {
@@ -41,7 +65,7 @@ export const MenuPage = () => {
     addItem(cartItem);
   };
 
-  const filteredItems = mockItems.filter(item => 
+  const filteredItems = loaderData.items.filter(item => 
     category === "ALL" || item.category === category
   );
 
@@ -55,8 +79,6 @@ export const MenuPage = () => {
         return a.price - b.price;
       case "PRICE_DESC":
         return b.price - a.price;
-      case "RATING_DESC":
-        return b.rating.averageRating - a.rating.averageRating;
       default:
         return 0;
     }
@@ -75,7 +97,7 @@ export const MenuPage = () => {
           />
           <Select
             value={sort}
-            onValueChange={(value) => setSort(value as MenuItemSort)}
+            onValueChange={(value) => setSort(value as MenuSort)}
             options={sortOptions}
             className="w-full sm:w-48"
           />
@@ -90,4 +112,4 @@ export const MenuPage = () => {
       />
     </main>
   );
-}; 
+} 

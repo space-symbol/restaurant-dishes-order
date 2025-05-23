@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { createMenuItem } from '@/features/menu/api/create-menu-item';
 import { MenuItem } from '@/entities/menu';
+import { useNavigate } from 'react-router-dom';
 
 type CreateMenuItemFormProps = {
   onSuccess: () => void;
@@ -16,6 +17,7 @@ export const CreateMenuItemForm = ({ onSuccess, onCancel }: CreateMenuItemFormPr
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,6 +29,7 @@ export const CreateMenuItemForm = ({ onSuccess, onCancel }: CreateMenuItemFormPr
         price: parseFloat(formData.price),
       });
       onSuccess();
+      navigate('..', { replace: true });
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to create menu item');
     } finally {

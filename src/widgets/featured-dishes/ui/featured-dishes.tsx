@@ -1,8 +1,13 @@
 import { cn } from "@/shared/lib/utils";
 import { useIntersectionObserver } from "@/shared/hooks/use-intersection-observer";
 import { FeaturedDishesList } from "@/features/menu-aggregate";
+import type { Route } from "@/app/routes/home/+types/home";
 
-export const FeaturedDishes = () => {
+interface FeaturedDishesProps {
+  initialData?: Route.LoaderData['featuredDishes'];
+}
+
+export const FeaturedDishes = ({ initialData }: FeaturedDishesProps) => {
   const { ref: sectionRef, isVisible: isSectionVisible } = useIntersectionObserver({
     rootMargin: "100px",
     threshold: 0.5,
@@ -22,7 +27,7 @@ export const FeaturedDishes = () => {
           </p>
         </div>
 
-        <FeaturedDishesList isVisible={isSectionVisible} />
+        <FeaturedDishesList isVisible={isSectionVisible} initialData={initialData} />
       </div>
     </section>
   );

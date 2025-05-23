@@ -5,14 +5,17 @@ import { MenuItemCategory, MenuItemSort } from "@/entities/menu/model/types/type
 import { z } from "zod";
 import { menuItemWithRatingSchema } from "../model/schemas";
 
-
-const responseSchema = z.array(menuItemWithRatingSchema)
+const responseSchema = z.object({
+  items: z.array(menuItemWithRatingSchema),
+  total: z.number(),
+});
 
 export const getMenuItemsWithRatings = createService(async (params?: {
   category?: MenuItemCategory;
   sort?: MenuItemSort | 'RATE_ASC' | 'RATE_DESC';
 }) => {
-  const response = await $api.get<MenuItemWithRating[]>("/v1/menu-aggregate", { params });
+  const response = await $api.get<{ items: MenuItemWithRating[]; total: number }>("/v1/menu-aggregate", { params });
+  console.log("getMenuItemsWithRatings", response)
   const parsedResponse = responseSchema.parse(response.data);
   return parsedResponse;
 }); 

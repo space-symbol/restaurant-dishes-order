@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { updateMenuItem } from '@/features/menu/api/update-menu-item';
 import { MenuItem } from '@/entities/menu';
+import { useNavigate } from 'react-router';
 
 type EditMenuItemFormProps = {
   item: MenuItem;
@@ -17,17 +18,22 @@ export const EditMenuItemForm = ({ item, onSuccess, onCancel }: EditMenuItemForm
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       setLoading(true);
       setError(null);
-      await updateMenuItem(item.id, {
-        ...formData,
-        price: parseFloat(formData.price),
+      await updateMenuItem({
+        id: item.id,
+        updates: {
+          ...formData,
+          price: parseFloat(formData.price),
+        }
       });
       onSuccess();
+      navigate('..', { replace: true });
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to update menu item');
     } finally {

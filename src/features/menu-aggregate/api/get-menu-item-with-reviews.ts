@@ -32,7 +32,5 @@ export const getMenuItemWithReviews = createService(async (data: {
   });
 
   const parsedResponse = responseSchema.parse(response.data);
-  console.log(parsedResponse);
-
   return parsedResponse;
 }); 
