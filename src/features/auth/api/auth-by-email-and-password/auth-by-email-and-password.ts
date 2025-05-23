@@ -24,7 +24,7 @@ export const authByEmailAndPassword = createService(async ({ email, password }: 
   const validatedData = loginSchema.parse({ email, password });
 
   try {
-    if (process.env.NODE_ENV === 'development' && email === "test@test.com" && password === "password") {
+    if (email === "test@test.com" && password === "password") {
       const testResponse = {
         accessToken: "test-token",
         user: TEST_USER

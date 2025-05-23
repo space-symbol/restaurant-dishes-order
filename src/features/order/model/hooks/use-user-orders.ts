@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, type UseQueryOptions } from "@tanstack/react-query";
 import { orderKeys } from "../query-keys";
 import { getUserOrders } from "../../api/get-user-orders";
 
@@ -8,9 +8,13 @@ interface UseUserOrdersProps {
   size?: number;
 }
 
-export const useUserOrders = ({ sort = "DATE_DESC", from = 0, size = 10 }: UseUserOrdersProps = {}) => {
+export const useUserOrders = (
+  { sort = "DATE_DESC", from = 0, size = 10 }: UseUserOrdersProps = {},
+  options?: UseQueryOptions<any>
+) => {
   return useQuery({
     queryKey: orderKeys.my({ sort, from, size }),
     queryFn: () => getUserOrders({ sort, from, size }),
+    ...options,
   });
 }; 

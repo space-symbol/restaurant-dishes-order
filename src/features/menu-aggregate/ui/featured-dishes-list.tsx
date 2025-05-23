@@ -3,14 +3,24 @@ import { MenuItemWithRating, MenuList } from "@/entities/menu";
 import { Loader } from "@/shared/ui/loader";
 import { cn } from "@/shared/lib/utils";
 import { useMenuItemsWithRatings } from "../model/hooks/use-menu-items-with-ratings";
+import type { Route } from "@/app/routes/home/+types/home";
 
 interface FeaturedDishesListProps {
   isVisible: boolean;
+  initialData?: Route.LoaderData['featuredDishes'];
 }
 
-export const FeaturedDishesList = ({ isVisible }: FeaturedDishesListProps) => {
+export const FeaturedDishesList = ({ isVisible, initialData }: FeaturedDishesListProps) => {
   const { addItem } = useCartStore();
-  const { data: menuItems, isLoading, error } = useMenuItemsWithRatings();
+  const { data: menuItems, isLoading, error } = useMenuItemsWithRatings(
+    { sort: 'RATE_DESC' },
+    {
+      initialData: initialData ? {
+        items: initialData.items,
+        total: initialData.total,
+      } : undefined
+    }
+  );
 
   const handleAddToCart = (item: MenuItemWithRating) => {
     const cartItem: CartItem = {
@@ -40,7 +50,7 @@ export const FeaturedDishesList = ({ isVisible }: FeaturedDishesListProps) => {
     );
   }
 
-  if (!menuItems?.data) {
+  if (!menuItems) {
     return (
       <div className="text-center text-gray-500 py-8">
         <p>Блюд не найдено</p>
@@ -50,7 +60,7 @@ export const FeaturedDishesList = ({ isVisible }: FeaturedDishesListProps) => {
 
   return (
     <MenuList
-      items={menuItems.data}
+      items={menuItems.items}
       onAddToCart={handleAddToCart}
       showFeaturedOnly={true}
       showPagination={true}

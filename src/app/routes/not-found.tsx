@@ -1,7 +1,7 @@
 import { Link } from "react-router";
 import { Route } from "../+types/root";
 
-export const meta = () => {
+export const meta = ({}: Route.MetaArgs) => {
   return [
     { title: "Savory | Страница не найдена" },
     { name: "description", content: "Страницы не существует." },
