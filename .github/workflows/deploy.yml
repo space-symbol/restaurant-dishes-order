@@ -1,0 +1,65 @@
+name: Deploy to VDS
+
+on:
+  push:
+    branches: [ master ] 
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup Node.js (только для CI)
+      uses: actions/setup-node@v3
+      with:
+        node-version: '22.16.0'
+        cache: 'npm'
+        
+    - name: Install dependencies (только для CI)
+      run: npm ci
+      
+    - name: Build application (только для CI)
+      run: npm run build
+
+    - name: Deploy to VDS
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.VDS_HOST }}
+        username: ${{ secrets.VDS_USERNAME }}
+        key: ${{ secrets.VDS_SSH_KEY }}
+        script: |
+          set -e 
+
+          export NVM_DIR="$HOME/.nvm"
+          [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+          nvm use 22.16.0  # Укажите версию Node.js, которую используете
+
+          node -v
+          npm -v
+          pm2 -v
+
+          cd ~/
+          if [ -d "restaurant-frontend/.git" ]; then
+            cd restaurant-frontend
+            git config pull.rebase true
+            if git ls-remote --exit-code origin master; then
+              git pull origin master
+            else
+              echo "Ошибка: Ветка 'master' не найдена."
+              exit 1
+            fi
+          else
+            git clone git@github.com:${{ github.repository }}.git restaurant-frontend
+            cd restaurant-frontend
+          fi
+          
+          npm ci
+          npm run build
+          export 
+          if pm2 list | grep -q 'restaurant-frontend'; then
+            pm2 restart restaurant-frontend
+          else
+            PORT=3003 pm2 start npm --name "restaurant-frontend" --  run start
+          fi

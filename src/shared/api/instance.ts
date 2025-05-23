@@ -1,7 +1,7 @@
 import axios from "axios";
 import { LOCALSTORAGE_TOKEN_KEY } from "../consts/local-storage";
 
-export const API_URL = 'http://localhost:3000';
+export const API_URL = `http://localhost:9091/api/v1`;
 
 export const $api = axios.create({
 	baseURL: import.meta.env.VITE_API_URL,
@@ -13,6 +13,7 @@ $api.interceptors.request.use((config) => {
 	}
 	return config;
 });
+
 $api.interceptors.response.use((config) => {
 	return config
 }, async (error) => {

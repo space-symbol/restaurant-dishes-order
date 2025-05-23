@@ -8,8 +8,10 @@ export function createService<A, R>(service: (args: A) => Promise<R>): (args: A)
   return async (args: A) => {
     try {
       const data = await service(args);
+      console.log(data);
       return { data };
     } catch (error) {
+      console.log(error);
       if (error instanceof ZodError) {
         throw new Error("Ошибка при получении данных");
       } else if (error instanceof Error) {
