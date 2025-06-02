@@ -1,6 +1,6 @@
 import { cn } from "@/shared/lib/utils";
 import { useIntersectionObserver } from "@/shared/hooks/use-intersection-observer";
-import { FeaturedDishesList } from "@/features/menu-aggregate";
+import { DishesList } from "@/features/menu-aggregate";
 import type { Route } from "@/app/routes/home/+types/home";
 
 interface FeaturedDishesProps {
@@ -27,7 +27,7 @@ export const FeaturedDishes = ({ initialData }: FeaturedDishesProps) => {
           </p>
         </div>
 
-        <FeaturedDishesList isVisible={isSectionVisible} initialData={initialData} />
+        <DishesList isVisible={isSectionVisible} initialData={initialData} />
       </div>
     </section>
   );

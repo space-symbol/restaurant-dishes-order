@@ -96,7 +96,7 @@ export default function DashboardMenu() {
   const totalPages = Math.ceil(total / pageSize);
 
   return (
-    <main className="flex flex-col gap-6">
+    <main className="flex flex-col gap-6 h-full">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">Управление меню</h1>
         <div className="flex gap-2">
@@ -107,7 +107,7 @@ export default function DashboardMenu() {
       <div className="flex gap-4 items-center">
         <Select
           value={category || 'ALL'}
-          onValueChange={(value) => handleCategoryChange(value as MenuItemCategory | undefined)}
+          onValueChange={(value) => handleCategoryChange(value === 'ALL' ? undefined : value as MenuItemCategory)}
           options={CATEGORY_OPTIONS}
         />
 
@@ -119,7 +119,7 @@ export default function DashboardMenu() {
       </div>
 
       {error && (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded h-full">
           {error}
         </div>
       )}
@@ -128,7 +128,7 @@ export default function DashboardMenu() {
         <div className="text-center py-8">Загрузка...</div>
       ) : (
         <>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 overflow-auto h-auto">
             {items.map((item) => (
               <Card key={item.id} className="p-6">
                 <div className="aspect-square bg-gray-100 rounded-lg mb-4">

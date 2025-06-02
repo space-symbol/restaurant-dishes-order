@@ -1,12 +1,20 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { MenuItem, CreateMenuItemDto } from '@/entities/menu';
 import { getMenuItems } from '../../api/get-menu-items';
 import { createMenuItem } from '../../api/create-menu-item';
+import { ServiceResponse } from '@/shared/api/create-service';
 
 const DEFAULT_PAGE_SIZE = 9;
 
 type MenuSort = 'PRICE_ASC' | 'PRICE_DESC' | 'NAME_ASC' | 'NAME_DESC';
 type MenuCategory = 'APPETIZER' | 'MAIN' | 'DESSERT' | 'DRINK';
+
+interface MenuItemsResponse {
+  items: MenuItem[];
+  total: number;
+  from: number;
+  size: number;
+}
 
 export const useMenuItems = () => {
   const [items, setItems] = useState<MenuItem[]>([]);
@@ -27,9 +35,10 @@ export const useMenuItems = () => {
         sort,
         category,
       });
-      setItems(response.items);
-      setTotal(response.total);
-      return response;
+      const data = response.data as MenuItemsResponse;
+      setItems(data.items);
+      setTotal(data.total);
+      return data;
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch menu items');
       throw err;
@@ -38,11 +47,16 @@ export const useMenuItems = () => {
     }
   }, [currentPage, sort, category]);
 
+  useEffect(() => {
+    fetchItems();
+  }, [fetchItems]);
+
   const createItem = useCallback(async (data: CreateMenuItemDto) => {
     try {
       setIsLoading(true);
       setError(null);
-      const newItem = await createMenuItem(data);
+      const response = await createMenuItem(data);
+      const newItem = response.data as MenuItem;
       setItems(prev => [...prev, newItem]);
       setTotal(prev => prev + 1);
       return newItem;

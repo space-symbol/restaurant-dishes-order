@@ -17,5 +17,5 @@ export interface CreateOrderData {
   name: string;
   phone: string;
   pickupOptionId: string;
-  [key: string]: any; // Allow additional fields based on pickup option
+  [key: string]: any; 
 } 

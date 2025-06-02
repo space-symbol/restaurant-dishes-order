@@ -14,20 +14,36 @@ const authResponseSchema = z.object({
 
 export type Response = z.infer<typeof authResponseSchema>;
 
-const TEST_USER = {
-  id: "test-id",
-  email: "test@test.com",
-  role: "ADMIN" as const,
+// Тестовые пользователи для быстрой проверки
+const TEST_USERS = {
+  user: {
+    id: "user1",
+    email: "user@example.com",
+    role: "USER" as const,
+    password: "password123"
+  },
+  admin: {
+    id: "admin1",
+    email: "admin@example.com",
+    role: "ADMIN" as const,
+    password: "admin123"
+  }
 };
 
-export const authByEmailAndPassword = createService(async ({ email, password }: Login): Promise<Response> => {
+export const authByEmailAndPassword = createService(async ({ email, password }: Login) => {
   const validatedData = loginSchema.parse({ email, password });
 
   try {
-    if (email === "test@test.com" && password === "password") {
+    // Быстрая проверка для тестовых пользователей
+    const testUser = Object.values(TEST_USERS).find(u => u.email === email && u.password === password);
+    if (testUser) {
       const testResponse = {
-        accessToken: "test-token",
-        user: TEST_USER
+        accessToken: `mock-access-token-${testUser.id}`,
+        user: {
+          id: testUser.id,
+          email: testUser.email,
+          role: testUser.role
+        }
       };
       
       localStorage.setItem(ACCESS_TOKEN_KEY, testResponse.accessToken);
@@ -36,16 +52,10 @@ export const authByEmailAndPassword = createService(async ({ email, password }: 
       return testResponse;
     }
 
-    const response = await $api.post<Response>('/auth/login', validatedData);
-    
-    if (response.status !== 200) {
-      throw new Error('Неверные логин или пароль');
-    }
-
+    const response = await $api.post('/auth/login', validatedData);
     const data = authResponseSchema.parse(response.data);
 
     localStorage.setItem(ACCESS_TOKEN_KEY, data.accessToken);
-    
     useAuthStore.getState().setAuth(data.user, data.accessToken);
 
     return data;

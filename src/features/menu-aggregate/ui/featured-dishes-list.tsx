@@ -5,12 +5,12 @@ import { cn } from "@/shared/lib/utils";
 import { useMenuItemsWithRatings } from "../model/hooks/use-menu-items-with-ratings";
 import type { Route } from "@/app/routes/home/+types/home";
 
-interface FeaturedDishesListProps {
+interface DishesListProps {
   isVisible: boolean;
   initialData?: Route.LoaderData['featuredDishes'];
 }
 
-export const FeaturedDishesList = ({ isVisible, initialData }: FeaturedDishesListProps) => {
+export const DishesList = ({ isVisible, initialData }: DishesListProps) => {
   const { addItem } = useCartStore();
   const { data: menuItems, isLoading, error } = useMenuItemsWithRatings(
     { sort: 'RATE_DESC' },
@@ -62,7 +62,6 @@ export const FeaturedDishesList = ({ isVisible, initialData }: FeaturedDishesLis
     <MenuList
       items={menuItems.items}
       onAddToCart={handleAddToCart}
-      showFeaturedOnly={true}
       showPagination={true}
       itemsPerPage={4}
       className={cn(

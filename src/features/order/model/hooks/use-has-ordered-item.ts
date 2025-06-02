@@ -1,10 +1,11 @@
 import { useUserOrders } from "./use-user-orders";
+import { Order } from "@/entities/order";
 
 export const useHasOrderedItem = (menuItemId: string) => {
   const { data } = useUserOrders({});
-  if (!data) return false;
+  if (!data?.orders) return false;
 
-  return data.some(order => 
-    order.items.some(item => item.menuItemId === menuItemId)
+  return data.orders.some((order: Order) => 
+    order.items.some((item: { menuItemId: string }) => item.menuItemId === menuItemId)
   );
 }; 
