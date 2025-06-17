@@ -3,7 +3,7 @@ import { Button } from "@/shared/ui/button";
 import { useState } from "react";
 import { Route } from "./+types";
 import { useMenuItems, useCreateMenuItem, useUpdateMenuItem, useDeleteMenuItem } from "@/features/menu";
-import { MenuItem, CreateMenuItemDto, MenuItemCategory } from "@/entities/menu";
+import { MenuItem, CreateMenuItemDto, MenuItemCategory, MenuItemSort } from "@/entities/menu";
 import { formatCurrency } from "@/shared/lib/currency";
 import { Select } from "@/shared/ui/select";
 import { CATEGORY_OPTIONS, SORT_OPTIONS } from "@/shared/constants/menu-options";
@@ -19,19 +19,17 @@ export const meta = ({}: Route.MetaArgs) => {
 export default function DashboardMenu() {
   const [isCreating, setIsCreating] = useState(false);
   const [editingItem, setEditingItem] = useState<MenuItem | null>(null);
-  const {
-    items,
-    total,
-    currentPage,
-    pageSize,
-    isLoading,
-    error,
-    sort,
+  const [currentPage, setCurrentPage] = useState(0);
+  const [pageSize] = useState(10);
+  const [sort, setSort] = useState<MenuItemSort>('AZ');
+  const [category, setCategory] = useState<MenuItemCategory | undefined>();
+
+  const { data: items = [], isLoading, error } = useMenuItems({
     category,
-    handlePageChange,
-    handleSortChange,
-    handleCategoryChange,
-  } = useMenuItems();
+    sort,
+    from: currentPage * pageSize,
+    size: pageSize
+  });
 
   const { mutateAsync: createItem, isPending: isCreatingItem } = useCreateMenuItem();
   const { mutateAsync: updateItem, isPending: isUpdatingItem } = useUpdateMenuItem();
@@ -52,7 +50,7 @@ export default function DashboardMenu() {
     try {
       if (editingItem) {
         const response = await updateItem({
-          id: editingItem.id,
+          id: String(editingItem.id),
           updates: data
         });
         if (response.data) {
@@ -78,13 +76,13 @@ export default function DashboardMenu() {
     setIsCreating(true);
   };
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = async (id: number) => {
     if (!confirm('Вы уверены, что хотите удалить это блюдо?')) {
       return;
     }
 
     try {
-      const response = await deleteItem(id);
+      const response = await deleteItem(String(id));
       if (response.data === null) {
         toast.success('Блюдо удалено успешно');
       }
@@ -93,6 +91,20 @@ export default function DashboardMenu() {
     }
   };
 
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  const handleSortChange = (newSort: MenuItemSort) => {
+    setSort(newSort);
+  };
+
+  const handleCategoryChange = (newCategory: MenuItemCategory | undefined) => {
+    setCategory(newCategory);
+  };
+
+  // For now, we'll assume a fixed total since the API doesn't return pagination info
+  const total = items.length;
   const totalPages = Math.ceil(total / pageSize);
 
   return (
@@ -112,15 +124,15 @@ export default function DashboardMenu() {
         />
 
         <Select
-          value={sort || 'NAME_ASC'}
-          onValueChange={(value) => handleSortChange(value as typeof sort)}
+          value={sort || 'AZ'}
+          onValueChange={(value) => handleSortChange(value as MenuItemSort)}
           options={SORT_OPTIONS}
         />
       </div>
 
       {error && (
         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded h-full">
-          {error}
+          {error instanceof Error ? error.message : String(error)}
         </div>
       )}
 
@@ -198,59 +210,58 @@ export default function DashboardMenu() {
             <h2 className="text-xl font-bold mb-4">
               {editingItem ? 'Редактировать блюдо' : 'Добавить блюдо'}
             </h2>
-            <form className="space-y-4" onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium mb-1">Название</label>
                 <input
                   type="text"
                   name="name"
-                  className="w-full p-2 border rounded"
-                  placeholder="Введите название блюда"
                   defaultValue={editingItem?.name}
                   required
+                  className="w-full p-2 border rounded"
                 />
               </div>
               <div>
                 <label className="block text-sm font-medium mb-1">Описание</label>
                 <textarea
                   name="description"
-                  className="w-full p-2 border rounded"
-                  placeholder="Введите описание блюда"
                   defaultValue={editingItem?.description}
                   required
+                  className="w-full p-2 border rounded"
+                  rows={3}
                 />
               </div>
               <div>
                 <label className="block text-sm font-medium mb-1">Категория</label>
-                <Select
+                <select
                   name="category"
                   defaultValue={editingItem?.category}
                   required
-                  options={CATEGORY_OPTIONS}
-                />
+                  className="w-full p-2 border rounded"
+                >
+                  <option value="">Выберите категорию</option>
+                  <option value="PASTA">Паста</option>
+                  <option value="MEAT">Мясо</option>
+                  <option value="SALAD">Салат</option>
+                  <option value="DESSERT">Десерт</option>
+                  <option value="DRINK">Напиток</option>
+                  <option value="BREAKFAST">Завтрак</option>
+                  <option value="LUNCH">Обед</option>
+                </select>
               </div>
               <div>
                 <label className="block text-sm font-medium mb-1">Цена</label>
                 <input
                   type="number"
                   name="price"
-                  className="w-full p-2 border rounded"
-                  placeholder="Введите цену"
                   defaultValue={editingItem?.price}
                   required
                   min="0"
                   step="0.01"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-1">Фото</label>
-                <input
-                  type="file"
                   className="w-full p-2 border rounded"
-                  accept="image/*"
                 />
               </div>
-              <div className="flex justify-end gap-2">
+              <div className="flex gap-2 justify-end">
                 <Button
                   type="button"
                   variant="outline"
@@ -261,7 +272,7 @@ export default function DashboardMenu() {
                 >
                   Отмена
                 </Button>
-                <Button 
+                <Button
                   type="submit"
                   disabled={isCreatingItem || isUpdatingItem}
                 >

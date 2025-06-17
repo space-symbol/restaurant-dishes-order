@@ -3,6 +3,7 @@ import { Button } from "@/shared/ui/button";
 import { OrdersList } from "@/entities/order";
 import { useUserOrders } from "@/features/order";
 import { useNavigate } from "react-router";
+import { useAuthStore } from "@/entities/auth";
 import type { Route } from "@/app/routes/orders/+types/orders";
 
 const DEFAULT_PAGE_SIZE = 10;
@@ -15,15 +16,18 @@ export const UserOrders = ({ initialData }: UserOrdersProps) => {
   const [sortOrder, setSortOrder] = useState<"DATE_ASC" | "DATE_DESC">("DATE_DESC");
   const [currentPage, setCurrentPage] = useState(0);
   const navigate = useNavigate();
+  const { user } = useAuthStore();
 
   const { data, isLoading } = useUserOrders({
+    userName: user?.email || "user@example.com",
     sort: sortOrder,
     from: currentPage * DEFAULT_PAGE_SIZE,
     size: DEFAULT_PAGE_SIZE,
   }, {
+    queryKey: ["user-orders", user?.email, sortOrder, currentPage],
     initialData: {
       data: {
-        orders: initialData.orders,
+        items: initialData.orders,
         total: initialData.total,
       }
     }
@@ -62,7 +66,7 @@ export const UserOrders = ({ initialData }: UserOrdersProps) => {
       </div>
 
       <OrdersList 
-        orders={data?.data?.orders ?? []} 
+        orders={data?.data?.items ?? []} 
         isLoading={isLoading} 
         sort={sortOrder}
       />

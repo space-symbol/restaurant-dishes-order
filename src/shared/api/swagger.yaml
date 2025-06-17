@@ -1,0 +1,888 @@
+openapi: 3.0.0
+info:
+  title: Menu Items API
+  version: 1.0.0
+  description: API Menu Service
+
+servers:
+  - url: http://localhost:9091/v1
+    description: Development server
+
+paths:
+  /menu-items:
+    post:
+      summary: Создать новое блюдо
+      description: Доступно только сотрудникам
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MenuItemCreate'
+      responses:
+        '201':
+          description: Блюдо успешно создано
+      security:
+        - bearerAuth: []
+
+    get:
+      summary: Получить список блюд
+      description: Доступно всем пользователям
+      parameters:
+        - name: category
+          in: query
+          schema:
+            type: string
+            enum: [BREAKFAST, LUNCH, DINNER, DRINKS, SNACKS, SALADS]
+          description: Категория блюд для фильтрации
+        - name: sort
+          in: query
+          schema:
+            type: string
+            enum: [AZ, ZA, PRICE_ASC, PRICE_DESC, DATE_ASC, DATE_DESC]
+          description: |
+            Тип сортировки:
+            - AZ: По алфавиту (А-Я)
+            - ZA: По алфавиту (Я-А)
+            - PRICE_ASC: Цена по возрастанию
+            - PRICE_DESC: Цена по убыванию
+            - DATE_ASC: Дата создания (старые сначала)
+            - DATE_DESC: Дата создания (новые сначала)
+      responses:
+        '200':
+          description: Список блюд успешно получен
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MenuItemResponse'
+
+  /menu-items/{id}:
+    get:
+      summary: Получить информацию о блюде
+      description: Доступно всем пользователям
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: ID блюда
+      responses:
+        '200':
+          description: Информация о блюде успешно получена
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MenuItemResponse'
+
+    patch:
+      summary: Обновить информацию о блюде
+      description: Доступно только сотрудникам
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: ID блюда
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MenuItemUpdate'
+      responses:
+        '200':
+          description: Информация о блюде успешно обновлена
+      security:
+        - bearerAuth: []
+
+    delete:
+      summary: Удалить блюдо
+      description: Доступно только сотрудникам
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: ID блюда
+      responses:
+        '204':
+          description: Блюдо успешно удалено
+      security:
+        - bearerAuth: []
+
+  /menu-orders:
+    post:
+      summary: Создать новый заказ
+      description: Создание заказа пользователем
+      parameters:
+        - name: X-User-Name
+          in: header
+          required: true
+          schema:
+            type: string
+          example: Dima
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderCreateRequest'
+      responses:
+        '201':
+          description: Заказ успешно создан
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderResponse'
+
+    get:
+      summary: Получить список заказов пользователя
+      description: Возвращает все заказы для указанного пользователя
+      parameters:
+        - name: X-User-Name
+          in: header
+          required: true
+          schema:
+            type: string
+          example: Dima
+      responses:
+        '200':
+          description: Список заказов успешно получен
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrderResponse'
+
+  /reviews:
+    post:
+      summary: Создать новый отзыв
+      description: Создание отзыва пользователем
+      parameters:
+        - name: X-User-Name
+          in: header
+          required: true
+          schema:
+            type: string
+          example: "user123"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateReviewRequest'
+      responses:
+        '201':
+          description: Отзыв успешно создан
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReviewResponse'
+        '400':
+          description: Неверный запрос
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+        '409':
+          description: Конфликт при создании отзыва
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+
+  /reviews/{id}:
+    get:
+     summary: Получить отзыв по ID
+     description: Получение информации о конкретном отзыве
+     parameters:
+       - name: id
+         in: path
+         required: true
+         schema:
+           type: integer
+           format: int64
+         example: 123
+     responses:
+       '200':
+         description: Отзыв успешно получен
+         content:
+           application/json:
+             schema:
+               $ref: '#/components/schemas/ReviewResponse'
+       '400':
+         description: Неверный запрос
+         content:
+           application/problem+json:
+             schema:
+               $ref: '#/components/schemas/ProblemDetail'
+       '404':
+         description: Отзыв не найден
+         content:
+           application/problem+json:
+             schema:
+               $ref: '#/components/schemas/ProblemDetail'
+
+  /reviews/my:
+    get:
+      summary: Получить отзывы пользователя
+      description: Получение списка отзывов, оставленных текущим пользователем
+      parameters:
+        - name: X-User-Name
+          in: header
+          required: true
+          schema:
+            type: string
+          example: "user123"
+        - name: from
+          in: query
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+          example: 0
+        - name: size
+          in: query
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+          example: 10
+        - name: sortBy
+          in: query
+          schema:
+            type: string
+            enum: [ date_asc, date_desc, rate_asc, rate_desc ]
+          example: date_asc
+      responses:
+        '200':
+          description: Список отзывов успешно получен
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReviewResponse'
+        '400':
+          description: Неверный запрос
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+
+  /reviews/menu-item/{menuId}:
+    get:
+      summary: Получить отзывы для блюда
+      description: Получение отзывов и рейтинга для конкретного блюда
+      parameters:
+        - name: menuId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          example: 456
+        - name: from
+          in: query
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+          example: 0
+        - name: size
+          in: query
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+          example: 10
+        - name: sortBy
+          in: query
+          schema:
+            type: string
+            enum: [ date_asc, date_desc, rate_asc, rate_desc ]
+          example: date_desc
+      responses:
+        '200':
+          description: Отзывы и рейтинг успешно получены
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RatedReviewsResponse'
+        '400':
+          description: Неверный запрос
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+
+
+  /reviews/ratins:
+    post:
+      summary: Получить рейтинги для блюд
+      description: Получение рейтингов для списка блюд
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetRatingsRequest'
+      responses:
+        '200':
+          description: Рейтинги успешно получены
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RatingsResponse'
+        '400':
+          description: Неверный запрос
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+
+  /menu-aggregate/{id}:
+    get:
+      summary: Получить агрегированную информацию о блюде
+      description: Возвращает информацию о блюде вместе с отзывами и рейтингом
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+          example: 123
+        - name: sortBy
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [ date_asc, date_desc, rate_asc, rate_desc ]
+          example: date_asc
+        - name: from
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+          example: 0
+        - name: size
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+          example: 10
+      responses:
+        '200':
+          description: Агрегированная информация успешно получена
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MenuAggregate'
+        '400':
+          description: Неверный запрос
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+        '404':
+          description: Блюдо не найдено
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+        '503':
+          description: Сервис недоступен
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+
+  /menu-aggregate:
+    get:
+      summary: Получить список блюд с рейтингами
+      description: Возвращает список блюд в указанной категории с рассчитанными рейтингами
+      parameters:
+        - name: category
+          in: query
+          required: true
+          schema:
+            type: string
+            enum: [ APPETIZER, MAIN, DESSERT, DRINK, LUNCH, BREAKFAST ]
+          example: MAIN
+        - name: sortBy
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [ AZ, ZA, DATE_ASC, DATE_DESC, PRICE_ASC, PRICE_DESC, RATE_ASC, RATE_DESC ]
+          example: RATE_DESC
+      responses:
+        '200':
+          description: Список блюд с рейтингами успешно получен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MenuAggregateList'
+        '503':
+          description: Сервис недоступен
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+
+components:
+  schemas:
+    MenuItemCreate:
+      type: object
+      required:
+        - name
+        - price
+        - category
+      properties:
+        name:
+          type: string
+          example: Хинкали
+        description:
+          type: string
+          example: Сочные хинкали со свининой/говядиной
+        price:
+          type: number
+          format: double
+          example: 10.00
+        category:
+          type: string
+          enum: [APPETIZER, MAIN, DESSERT, DRINK, LUNCH, BREAKFAST]
+          example: LUNCH
+        timeToCook:
+          type: integer
+          example: 20
+        weight:
+          type: number
+          format: double
+          example: 150.55
+        imageUrl:
+          type: string
+          format: uri
+          example: https://example.com/image.jpg
+        ingredientCollection:
+          type: object
+          properties:
+            ingredients:
+              type: array
+              items:
+                $ref: '#/components/schemas/Ingredient'
+
+    MenuItemUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Сочные хинкали
+        description:
+          type: string
+          example: Хинкали со свининой/говядиной
+        price:
+          type: number
+          format: double
+          example: 15.00
+        timeToCook:
+          type: integer
+          example: 25
+        imageUrl:
+          type: string
+          format: uri
+          example: https://example.com/new-image.jpg
+
+    MenuItemResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 3
+        name:
+          type: string
+          example: Хинкали
+        description:
+          type: string
+          example: Сочные хинкали со свининой/говядиной
+        price:
+          type: number
+          format: double
+          example: 10.00
+        category:
+          type: string
+          example: LUNCH
+        timeToCook:
+          type: integer
+          example: 20
+        weight:
+          type: number
+          format: double
+          example: 150.55
+        imageUrl:
+          type: string
+          format: uri
+          example: https://www.google.com/url
+        updatedAt:
+          type: string
+          example: "2025-05-03T17:54:34.114451"
+        createdAt:
+          type: string
+          example: "2025-05-02T12:10:11.342321"
+        ingredientCollection:
+          $ref: '#/components/schemas/IngredientCollection'
+
+    IngredientCollection:
+      type: object
+      properties:
+        ingredients:
+          type: array
+          items:
+            $ref: '#/components/schemas/Ingredient'
+
+    Ingredient:
+      type: object
+      properties:
+        name:
+          type: string
+          example: свинина
+        quantity:
+          type: string
+          example: 20 г
+
+    OrderCreateRequest:
+      type: object
+      required:
+        - nameToQuantity
+        - address
+      properties:
+        nameToQuantity:
+          type: object
+          additionalProperties:
+            type: integer
+          description: Сопоставление названия блюда с количеством
+          example:
+            Салат Цезарь: 10
+            Стейк из лосося: 20
+            Хинкали: 30
+        address:
+          $ref: '#/components/schemas/Address'
+
+    OrderResponse:
+        type: object
+        properties:
+          orderId:
+            type: integer
+            format: int64
+            example: 1
+          totalPrice:
+            type: number
+            format: double
+            example: 944.80
+          menuLineItems:
+            type: array
+            items:
+              $ref: '#/components/schemas/OrderLineItem'
+          address:
+            $ref: '#/components/schemas/Address'
+          status:
+            type: string
+            enum: [ NEW, PROCESSING, COMPLETED, CANCELLED ]
+            example: NEW
+          createdAt:
+            type: string
+            format: date-time
+            example: "2025-05-23T19:21:33.490423"
+
+    OrderLineItem:
+        type: object
+        properties:
+          menuItemName:
+            type: string
+            example: Стейк из лосося
+          price:
+            type: number
+            format: double
+            example: 25.99
+          quantity:
+            type: integer
+            example: 20
+
+    Address:
+        type: object
+        required:
+          - city
+          - street
+          - house
+        properties:
+          city:
+            type: string
+            example: Moscow
+          street:
+            type: string
+            example: Street
+          house:
+            type: integer
+            example: 1
+          apartment:
+            type: integer
+            example: 1
+
+    OrderItem:
+        type: object
+        properties:
+          name:
+            type: string
+            example: Салат Цезарь
+          quantity:
+            type: integer
+            example: 10
+          pricePerItem:
+            type: number
+            format: double
+            example: 15.50
+
+    CreateReviewRequest:
+      type: object
+      required:
+        - menuId
+        - rate
+      properties:
+        menuId:
+          type: integer
+          format: int64
+          minimum: 1
+          example: 456
+        comment:
+          type: string
+          nullable: true
+          minLength: 1
+          example: "Отличное блюдо!"
+        rate:
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 5
+          example: 5
+
+    GetRatingsRequest:
+        type: object
+        required:
+          - menuIds
+        properties:
+          menuIds:
+            type: array
+            minItems: 1
+            items:
+              type: integer
+              format: int64
+            example: [ 123, 456, 789 ]
+
+    ReviewResponse:
+        type: object
+        properties:
+          id:
+            type: integer
+            format: int64
+            example: 1
+          menuId:
+            type: integer
+            format: int64
+            example: 456
+          createdBy:
+            type: string
+            example: "user123"
+          comment:
+            type: string
+            example: "Очень вкусно!"
+          rate:
+            type: integer
+            format: int32
+            example: 5
+          createdAt:
+            type: string
+            format: date-time
+            example: "2023-05-15T12:00:00Z"
+
+    RatedReviewsResponse:
+        type: object
+        properties:
+          reviews:
+            type: array
+            items:
+              $ref: '#/components/schemas/ReviewResponse'
+          menuRating:
+            $ref: '#/components/schemas/MenuRatingInfo'
+
+    RatingsResponse:
+        type: object
+        properties:
+          menuRatings:
+            type: array
+            items:
+              $ref: '#/components/schemas/MenuRatingInfo'
+
+    MenuRatingInfo:
+        type: object
+        properties:
+          menuId:
+            type: integer
+            format: int64
+            example: 456
+          averageRating:
+            type: number
+            format: double
+            example: 4.8
+          totalRatings:
+            type: integer
+            format: int32
+            example: 25
+
+    ProblemDetail:
+        type: object
+        properties:
+          type:
+            type: string
+            format: uri
+          title:
+            type: string
+          status:
+            type: integer
+          detail:
+            type: string
+          instance:
+            type: string
+            format: uri
+
+    MenuAggregate:
+      type: object
+      properties:
+        menuItem:
+          $ref: '#/components/schemas/MenuItem'
+        reviews:
+          type: array
+          items:
+            $ref: '#/components/schemas/Review'
+        ratingInfo:
+          $ref: '#/components/schemas/MenuRatingInfo'
+        errorResponse:
+          $ref: '#/components/schemas/ErrorResponse'
+
+    MenuItem:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 123
+        name:
+          type: string
+          example: Хинкали
+        description:
+          type: string
+          example: Сочные хинкали со свининой/говядиной
+        price:
+          type: number
+          format: double
+          example: 10.00
+        category:
+          type: string
+          enum: [ APPETIZER, MAIN, DESSERT, DRINK, LUNCH, BREAKFAST ]
+          example: MAIN
+        timeToCook:
+          type: integer
+          example: 20
+        weight:
+          type: number
+          format: double
+          example: 150.55
+        imageUrl:
+          type: string
+          format: uri
+          example: https://example.com/image.jpg
+        updatedAt:
+          type: string
+          format: date-time
+          example: "2023-05-15T12:00:00Z"
+        createdAt:
+          type: string
+          format: date-time
+          example: "2023-05-10T10:30:00Z"
+        ingredientCollection:
+          $ref: '#/components/schemas/IngredientCollection'
+
+    ErrorResponse:
+      type: object
+      properties:
+        code:
+          type: string
+          example: SERVICE_UNAVAILABLE
+        message:
+          type: string
+          example: "Сервис временно недоступен"
+
+    MenuAggregateList:
+      type: object
+      properties:
+        menuItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/RatedMenuItem'
+
+    RatedMenuItem:
+        allOf:
+                  - $ref: '#/components/schemas/MenuItem'
+                  - type: object
+                    properties:
+                      wilsonScore:
+                        type: number
+                        format: float
+                        example: 4.85
+                      avgStars:
+                        type: number
+                        format: float
+                        example: 4.8
+
+    Review:
+      type: object
+      properties:
+                  id:
+                    type: integer
+                    format: int64
+                    example: 1
+                  menuId:
+                    type: integer
+                    format: int64
+                    example: 123
+                  createdBy:
+                    type: string
+                    example: "user123"
+                  comment:
+                    type: string
+                    example: "Очень вкусно!"
+                  rate:
+                    type: integer
+                    format: int32
+                    example: 5
+                  createdAt:
+                    type: string
+                    format: date-time
+                    example: "2023-05-15T12:00:00Z"
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

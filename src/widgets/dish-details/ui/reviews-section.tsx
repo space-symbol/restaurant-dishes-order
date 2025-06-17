@@ -22,13 +22,13 @@ export const ReviewsSection = ({
   hasOrdered,
   className,
 }: ReviewsSectionProps) => {
-  const [sort, setSort] = useState<ReviewSort>('DATE_DESC');
+  const [sort, setSort] = useState<ReviewSort>('date_desc');
   const [page, setPage] = useState(1);
   const pageSize = 5;
 
   const sortedReviews = useMemo(() => {
     return [...reviews].sort((a, b) => {
-      if (sort === 'DATE_DESC') {
+      if (sort === 'date_desc') {
         return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
       }
       return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();

@@ -1,86 +1,76 @@
-import { useCreateReview } from "../model/hooks/use-create-review";
 import { useState } from "react";
-import { StarIcon } from "@heroicons/react/24/solid";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { Button } from "@/shared/ui/button";
+import { Input } from "@/shared/ui/input";
+import { Rating } from "@/shared/ui/rating";
+import { createReview } from "../api/create-review";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { reviewKeys } from "../model/query-keys";
+
+const createReviewSchema = z.object({
+  rate: z.number().min(1).max(5),
+  comment: z.string().min(1, "Отзыв не может быть пустым"),
+});
+
+type CreateReviewFormData = z.infer<typeof createReviewSchema>;
 
 interface CreateReviewFormProps {
-  menuItemId: string;
+  menuId: number;
   onSuccess?: () => void;
 }
 
-export const CreateReviewForm = ({ menuItemId, onSuccess }: CreateReviewFormProps) => {
+export const CreateReviewForm = ({ menuId, onSuccess }: CreateReviewFormProps) => {
   const [rating, setRating] = useState(0);
-  const [comment, setComment] = useState("");
-  const [hoverRating, setHoverRating] = useState(0);
+  const queryClient = useQueryClient();
 
-  const { mutate: createReview, isPending } = useCreateReview();
+  const { register, handleSubmit, formState: { errors } } = useForm<CreateReviewFormData>({
+    resolver: zodResolver(createReviewSchema),
+    defaultValues: {
+      rate: 0,
+      comment: "",
+    },
+  });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (rating === 0) return;
-    createReview(
-      { menuItemId, rating, comment },
-      {
-        onSuccess: () => {
-          setRating(0);
-          setComment("");
-          onSuccess?.();
-        },
-      }
-    );
+  const { mutate: submitReview, isPending } = useMutation({
+    mutationFn: (data: CreateReviewFormData) => createReview({ ...data, menuId }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: reviewKeys.list(menuId) });
+      onSuccess?.();
+    },
+  });
+
+  const onSubmit = (data: CreateReviewFormData) => {
+    submitReview({ ...data, rate: rating });
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          Rating
-        </label>
-        <div className="flex gap-1">
-          {[...Array(5)].map((_, i) => (
-            <button
-              key={i}
-              type="button"
-              onClick={() => setRating(i + 1)}
-              onMouseEnter={() => setHoverRating(i + 1)}
-              onMouseLeave={() => setHoverRating(0)}
-              className="focus:outline-none"
-            >
-              <StarIcon
-                className={`w-8 h-8 ${
-                  i < (hoverRating || rating)
-                    ? "text-yellow-400"
-                    : "text-gray-300"
-                }`}
-              />
-            </button>
-          ))}
-        </div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">Оценка</label>
+        <Rating rating={rating} onRatingChange={setRating} />
+        {errors.rate && (
+          <p className="mt-1 text-sm text-red-600">{errors.rate.message}</p>
+        )}
       </div>
 
       <div>
-        <label
-          htmlFor="comment"
-          className="block text-sm font-medium text-gray-700 mb-2"
-        >
-          Comment
-        </label>
-        <textarea
-          id="comment"
-          value={comment}
-          onChange={(e) => setComment(e.target.value)}
-          className="w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          rows={4}
-          required
+        <label className="block text-sm font-medium text-gray-700 mb-1">Отзыв</label>
+        <Input
+          {...register("comment")}
+          type="text"
+          placeholder="Напишите ваш отзыв"
+          className="w-full"
         />
+        {errors.comment && (
+          <p className="mt-1 text-sm text-red-600">{errors.comment.message}</p>
+        )}
       </div>
 
-      <button
-        type="submit"
-        disabled={isPending || rating === 0}
-        className="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 disabled:opacity-50"
-      >
-        {isPending ? "Submitting..." : "Submit Review"}
-      </button>
+      <Button type="submit" disabled={isPending}>
+        {isPending ? "Отправка..." : "Отправить отзыв"}
+      </Button>
     </form>
   );
 }; 

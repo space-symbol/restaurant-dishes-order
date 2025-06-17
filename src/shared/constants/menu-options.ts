@@ -1,6 +1,6 @@
 export const SORT_OPTIONS = [
-  { value: 'NAME_ASC', label: 'По алфавиту (А-Я)' },
-  { value: 'NAME_DESC', label: 'По алфавиту (Я-А)' },
+  { value: 'AZ', label: 'По алфавиту (А-Я)' },
+  { value: 'ZA', label: 'По алфавиту (Я-А)' },
   { value: 'PRICE_ASC', label: 'По возрастанию цены' },
   { value: 'PRICE_DESC', label: 'По убыванию цены' },
   { value: 'RATE_ASC', label: 'По возрастанию рейтинга' },
@@ -9,8 +9,21 @@ export const SORT_OPTIONS = [
 
 export const CATEGORY_OPTIONS = [
   { value: 'ALL', label: 'Все категории' },
-  { value: 'APPETIZER', label: 'Закуски' },
-  { value: 'MAIN', label: 'Основные блюда' },
+  { value: 'PASTA', label: 'Паста' },
+  { value: 'MEAT', label: 'Мясо' },
+  { value: 'SALAD', label: 'Салаты' },
   { value: 'DESSERT', label: 'Десерты' },
   { value: 'DRINK', label: 'Напитки' },
-]; 
+  { value: 'BREAKFAST', label: 'Завтрак' },
+  { value: 'LUNCH', label: 'Обед' },
+];
+
+export const CATEGORY_MAP = {
+  PASTA: 'Паста',
+  MEAT: 'Мясо',
+  SALAD: 'Салаты',
+  DESSERT: 'Десерты',
+  DRINK: 'Напитки',
+  BREAKFAST: 'Завтрак',
+  LUNCH: 'Обед',
+} as const; 

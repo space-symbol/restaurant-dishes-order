@@ -1,5 +1,5 @@
 import { useHasOrderedItem } from "@/features/order/model/hooks/use-has-ordered-item";
-import { mockMenuItems, type MenuItem } from "@/shared/mocks/dishes";
+import { mockMenuItems, type MenuItem } from "@/shared/api/mock-data";
 import { ReviewsSection } from "./reviews-section";
 import { cn } from "@/shared/lib/utils";
 import { StarIcon } from "lucide-react";
@@ -11,7 +11,7 @@ interface DishDetailsProps {
 
 export const DishDetails = ({ menuId, className }: DishDetailsProps) => {
   const hasOrdered = useHasOrderedItem(menuId);
-  const menuItem = mockMenuItems.find((item: MenuItem) => item.id === menuId);
+  const menuItem = mockMenuItems.find((item: MenuItem) => item.id === Number(menuId));
 
   if (!menuItem) {
     return (
@@ -35,8 +35,8 @@ export const DishDetails = ({ menuId, className }: DishDetailsProps) => {
             <h1 className="text-3xl sm:text-4xl font-bold mb-2">{menuItem.name}</h1>
             <div className="flex items-center gap-2">
               <StarIcon className="w-5 h-5 text-yellow-400" />
-              <span className="text-lg font-medium">{menuItem.averageRating.toFixed(1)}</span>
-              <span className="text-sm opacity-80">({menuItem.rating} отзывов)</span>
+              <span className="text-lg font-medium">4.5</span>
+              <span className="text-sm opacity-80">(2 отзыва)</span>
             </div>
           </div>
         </div>
@@ -54,9 +54,9 @@ export const DishDetails = ({ menuId, className }: DishDetailsProps) => {
 
       <div className="mt-8 bg-white rounded-2xl shadow-sm p-6">
         <ReviewsSection
-          reviews={menuItem.reviews}
-          rating={menuItem.rating}
-          averageRating={menuItem.averageRating}
+          reviews={[]}
+          rating={2}
+          averageRating={4.5}
           hasOrdered={hasOrdered}
         />
       </div>

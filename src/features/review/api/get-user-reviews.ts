@@ -8,6 +8,8 @@ type Response = z.infer<typeof responseSchema>;
 
 export const getUserReviews = createService(async (params?: z.infer<typeof reviewPaginationParamsSchema>) => {
   const validatedParams = params ? reviewPaginationParamsSchema.parse(params) : undefined;
-  const response = await $api.get("/admin/reviews", { params: validatedParams });
+  const response = await $api.get("/v1/admin/reviews", { 
+    params: validatedParams
+  });
   return responseSchema.parse(response.data);
 }); 

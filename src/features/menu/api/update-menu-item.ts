@@ -7,11 +7,8 @@ const updateMenuItemSchema = menuItemSchema.omit({ id: true, createdAt: true, up
 type UpdateMenuItem = z.infer<typeof updateMenuItemSchema>;
 type Response = z.infer<typeof menuItemSchema>;
 
-export const updateMenuItem = createService(async (data: {
-  id: string;
-  updates: UpdateMenuItem;
-}) => {
+export const updateMenuItem = createService<{ id: string; updates: UpdateMenuItem }, Response>(async (data) => {
   const validatedUpdates = updateMenuItemSchema.parse(data.updates);
-  const response = await $api.patch<Response>(`/v1/menu-items/${data.id}`, validatedUpdates);
+  const response = await $api.patch(`/v1/menu-items/${data.id}`, validatedUpdates);
   return menuItemSchema.parse(response.data);
 }); 

@@ -7,6 +7,7 @@ import { useOrder } from "@/entities/order";
 import { useCartStore } from "@/entities/cart";
 import { toast } from "sonner";
 import { useAppNavigate } from "@/shared/hooks/use-navigate";
+import { CreateOrder } from "@/entities/order";
 
 export const OrderForm = () => {
   const [selectedPickupOption, setSelectedPickupOption] = useState(PICKUP_OPTIONS[0].id);
@@ -30,16 +31,23 @@ export const OrderForm = () => {
     e.preventDefault();
     
     try {
-      await createOrder({
-        items: items.map(item => ({
-          menuItemId: item.id,
-          quantity: item.quantity
-        })),
-        name,
-        phone,
-        pickupOptionId: selectedPickupOption,
-        ...additionalFields,
+      // Convert cart items to nameToQuantity format
+      const nameToQuantity: Record<string, number> = {};
+      items.forEach(item => {
+        nameToQuantity[item.name] = (nameToQuantity[item.name] || 0) + item.quantity;
       });
+
+      const orderData: CreateOrder = {
+        nameToQuantity,
+        address: {
+          city: additionalFields.city || "Москва",
+          street: additionalFields.street || "Улица",
+          house: parseInt(additionalFields.house) || 1,
+          apartment: additionalFields.apartment ? parseInt(additionalFields.apartment) : undefined
+        }
+      };
+
+      await createOrder(orderData);
 
       clearCart();
       toast.success("Заказ успешно создан!");

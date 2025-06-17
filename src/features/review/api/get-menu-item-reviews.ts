@@ -1,18 +1,18 @@
 import { $api } from "@/shared/api/instance";
 import { createService } from "@/shared/api/create-service";
-import { reviewSchema, reviewPaginationParamsSchema } from "@/entities/review/model/schemas";
+import { ratedReviewsResponseSchema, RatedReviewsResponse } from "@/entities/review/model/schemas";
 import { z } from "zod";
 
-const responseSchema = z.array(reviewSchema);
-type Response = z.infer<typeof responseSchema>;
+const paramsSchema = z.object({
+  from: z.number().optional(),
+  size: z.number().optional(),
+  sortBy: z.enum(["date_asc", "date_desc", "rate_asc", "rate_desc"]).optional()
+});
 
-export const getMenuItemReviews = createService(async (data: {
-  menuItemId: string;
-  params?: z.infer<typeof reviewPaginationParamsSchema>;
-}) => {
-  const validatedParams = data.params ? reviewPaginationParamsSchema.parse(data.params) : undefined;
-  const response = await $api.get<Response>(`/v1/reviews/menu-items/${data.menuItemId}`, { 
-    params: validatedParams 
+export const getMenuItemReviews = createService<{ menuId: number; params?: z.infer<typeof paramsSchema> }, RatedReviewsResponse>(async ({ menuId, params }) => {
+  const validatedParams = params ? paramsSchema.parse(params) : undefined;
+  const response = await $api.get(`/v1/reviews/menu-item/${menuId}`, { 
+    params: validatedParams
   });
-  return responseSchema.parse(response.data);
+  return ratedReviewsResponseSchema.parse(response.data);
 }); 

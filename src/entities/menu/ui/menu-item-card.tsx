@@ -1,70 +1,75 @@
-import { MenuItemWithRating } from "../model/types/types";
+import { RatedMenuItem } from "@/entities/menu-aggregate";
 import { Link } from "@/shared/ui/link";
 import { Button } from "@/shared/ui/button";
-import {  ShoppingCart } from "lucide-react";
+import { ShoppingCart } from "lucide-react";
 import { cn } from "@/shared/lib/utils";
 import { formatCurrency } from "@/shared/lib/currency";
 import { routesConfig } from "@/shared/config/routes";
-import { Rating } from "@/shared/ui/rating";
+import { RatingDisplay } from "@/shared/ui/rating-display";
+import { CATEGORY_MAP } from "@/shared/constants/menu-options";
 
 interface MenuItemCardProps {
-  item: MenuItemWithRating;
-  onAddToCart?: (item: MenuItemWithRating) => void;
+  item: RatedMenuItem;
+  onAddToCart?: (item: RatedMenuItem) => void;
   className?: string;
   animationDelay?: string;
   isVisible?: boolean;
 }
 
-export const MenuItemCard = (props: MenuItemCardProps) => {
-  const {
-    item,
-    onAddToCart,
-    className,
-    animationDelay,
-    isVisible,
-  } = props;
-
+export const MenuItemCard = ({ 
+  item, 
+  onAddToCart, 
+  className,
+  animationDelay,
+  isVisible = true 
+}: MenuItemCardProps) => {
   return (
-    <div className={cn(
-          "overflow-hidden border-none shadow-lg card-hover opacity-0 cursor-pointer",
-          isVisible && "animate-scale-in",
-          className
-        )}
-        style={{ animationDelay }}
+    <div 
+      className={cn(
+        "bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300",
+        isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4",
+        className
+      )}
+      style={{ animationDelay }}
     >
       <Link to={`${routesConfig.home.menu.path}/${item.id}`} className="block">
         <div className="h-60">
-          <img 
-            src={item.imageUrl} 
-            alt={item.name} 
-            className="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
-          />
+          {item.imageUrl && (
+            <img 
+              src={item.imageUrl} 
+              alt={item.name} 
+              className="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
+            />
+          )}
         </div>
-        <div className="grid grid-rows-[3.5rem_6rem] sm:grid-rows-[3rem_5rem] p-5">
-          <div className="flex justify-between items-start mb-2">
-            <h3 className="text-xl font-serif font-bold">{item.name}</h3>
-            <span className="text-restaurant-red font-medium">{formatCurrency(item.price)}</span>
+        <div className="grid grid-rows-[3.5rem_6rem] sm:grid-rows-[3rem_5rem] gap-2 p-5">
+          <div>
+            <h3 className="font-medium text-lg mb-1">{item.name}</h3>
+            <div className="flex items-center gap-2">
+              <RatingDisplay rating={item.avgStars} showValue />
+              <span className="text-sm text-gray-500">({item.wilsonScore.toFixed(1)})</span>
+            </div>
           </div>
-          <div className="grid">
-            <p className="text-restaurant-gray text-sm">{item.description}</p>
-            {item.rating !== undefined && (
-              <div className="flex items-center gap-2">
-                <Rating rating={item.availability ? item.rating.averageRating : 0} size="sm" />
-                <span className="text-sm text-restaurant-gray">({item.rating.totalReviews})</span>
-              </div>
-            )}
+          <div className="flex flex-col justify-between">
+            <p className="text-gray-600 text-sm line-clamp-2">{item.description}</p>
+            <div className="flex justify-between items-center mt-2">
+              <span className="font-medium">{formatCurrency(item.price)}</span>
+              <span className="text-sm text-gray-500">{CATEGORY_MAP[item.category as keyof typeof CATEGORY_MAP]}</span>
+            </div>
           </div>
         </div>
       </Link>
       {onAddToCart && (
-        <Button
-          className="w-full"  
-          onClick={() => onAddToCart(item)}
-          disabled={!item.availability}
-        >
-          <ShoppingCart className="w-4 h-4" />
-          {item.availability ? 'Добавить в корзину' : 'Нет в наличии'}
-        </Button>
+        <div className="p-5 pt-0">
+          <Button 
+            variant="outline" 
+            className="w-full"
+            onClick={() => onAddToCart(item)}
+          >
+            <ShoppingCart className="w-4 h-4 mr-2" />
+            Добавить в корзину
+          </Button>
+        </div>
       )}
     </div>
   );

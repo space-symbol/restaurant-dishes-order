@@ -1,10 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
-import { ReviewSort } from "@/entities/review/model/types/types";
+import { ReviewSort } from "@/entities/review";
 import { getMenuItemWithReviews } from "../../api/get-menu-item-with-reviews";
 import { menuAggregateKeys } from "../query-keys";
 
 export const useMenuItemWithReviews = (data: {
-  menuId: string;
+  menuId: number;
   params?: {
     sort?: ReviewSort;
     from?: number;
@@ -12,8 +12,11 @@ export const useMenuItemWithReviews = (data: {
   };
 }) => {
   return useQuery({
-    queryKey: menuAggregateKeys.menuItemWithReviews(data.menuId),
-    queryFn: async () => await getMenuItemWithReviews(data),
+    queryKey: menuAggregateKeys.menuItemWithReviews(String(data.menuId)),
+    queryFn: async () => await getMenuItemWithReviews({
+      menuId: data.menuId,
+      sortBy: data.params?.sort
+    }),
     enabled: !!data.menuId,
   });
 }; 

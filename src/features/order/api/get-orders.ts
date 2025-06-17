@@ -17,6 +17,6 @@ type Response = z.infer<typeof responseSchema>;
 
 export const getOrders = createService(async (params?: z.infer<typeof paramsSchema>) => {
   const validatedParams = params ? paramsSchema.parse(params) : undefined;
-  const response = await $api.get<Response>("/v1/menu-orders", { params: validatedParams });
+  const response = await $api.get("/v1/menu-orders", { params: validatedParams });
   return responseSchema.parse(response.data);
 }); 

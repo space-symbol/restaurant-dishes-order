@@ -1,6 +1,7 @@
 import { UserOrders } from "@/widgets/user-orders";
 import { Route } from "./+types/orders";
 import { getUserOrders } from "@/features/order/api/get-user-orders";
+import { useAuthStore } from "@/entities/auth";
 
 export const meta = () => {
   return [
@@ -15,14 +16,19 @@ export async function loader({ request }: Route.LoaderArgs) {
   const page = parseInt(url.searchParams.get('page') || '0');
   const size = 10;
   
+  // Получаем userName из аутентификации
+  const { user } = useAuthStore.getState();
+  const userName = user?.email || "user@example.com";
+  
   const response = await getUserOrders({
+    userName,
     sort: sort || "DATE_DESC",
     from: page * size,
     size,
   });
   
   return {
-    orders: response.data?.orders ?? [],
+    orders: response.data?.items ?? [],
     total: response.data?.total ?? 0,
   };
 }

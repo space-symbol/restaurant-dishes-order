@@ -2,7 +2,7 @@ export const mockMenuItems = [
   {
     id: "1",
     name: "Карбонара",
-    category: "Паста",
+    category: "PASTA",
     price: 12.99,
     available: true,
     description: "Классическая итальянская паста с беконом, сливками и пармезаном",
@@ -30,7 +30,7 @@ export const mockMenuItems = [
   {
     id: "2",
     name: "Стейк Рибай",
-    category: "Мясо",
+    category: "MEAT",
     price: 24.99,
     available: true,
     description: "Премиальный стейк из мраморной говядины, подается с овощами гриль",
@@ -51,7 +51,7 @@ export const mockMenuItems = [
   {
     id: "3",
     name: "Цезарь с курицей",
-    category: "Салаты",
+    category: "SALAD",
     price: 9.99,
     available: true,
     description: "Классический салат с куриным филе, хрустящими сухариками и соусом Цезарь",

@@ -1,4 +1,9 @@
+// UI Components
 export { OrderForm } from '../../widgets/order/ui/order-form';
 export { OrdersList } from './ui/orders-list';
+
+// Hooks
 export { useCreateOrder as useOrder } from '../../features/order/model/hooks/use-create-order';
-export type { Order, CreateOrderData } from './model/types/types'; 
+
+// Types
+export type { Order, OrderLineItem, Address, CreateOrder } from './model/schemas'; 

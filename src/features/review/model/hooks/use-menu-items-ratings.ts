@@ -5,7 +5,7 @@ import { reviewKeys } from "../query-keys";
 export const useMenuItemsRatings = (menuItemIds: string[]) => {
   return useQuery({
     queryKey: reviewKeys.menuItemRatings(menuItemIds),
-    queryFn: () => getMenuItemsRatings(menuItemIds),
+    queryFn: () => getMenuItemsRatings(menuItemIds.map(id => parseInt(id))),
     enabled: menuItemIds.length > 0,
   });
 }; 

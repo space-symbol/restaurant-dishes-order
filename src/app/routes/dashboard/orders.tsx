@@ -4,13 +4,15 @@ import { useState } from "react";
 import { Route } from "./+types";
 import { useUserOrders } from "@/features/order/model/hooks/use-user-orders";
 import { useUpdateOrderStatus } from "@/features/order/model/hooks/use-update-order-status";
-import { Order } from "@/entities/order/model/types/types";
+import { Order } from "@/entities/order/model/schemas";
 import { OrderStatus } from "@/entities/order/model/schemas";
 import { Select, SelectOption } from "@/shared/ui/select";
 import { toast } from "sonner";
 import { formatCurrency } from "@/shared/lib/currency";
 import { format } from "date-fns";
 import { ru } from "date-fns/locale";
+import { useParams } from "react-router";
+import { OrdersList } from "@/entities/order/ui/orders-list";
 
 const SORT_OPTIONS: SelectOption[] = [
   { value: "DATE_DESC", label: "Сначала новые" },
@@ -18,7 +20,7 @@ const SORT_OPTIONS: SelectOption[] = [
 ];
 
 const STATUS_COLORS: Record<OrderStatus, string> = {
-  PENDING: "bg-yellow-100 text-yellow-800",
+  NEW: "bg-yellow-100 text-yellow-800",
   PROCESSING: "bg-blue-100 text-blue-800",
   COMPLETED: "bg-green-100 text-green-800",
   CANCELLED: "bg-red-100 text-red-800",
@@ -41,6 +43,7 @@ export default function DashboardOrders() {
     isLoading,
     error,
   } = useUserOrders({
+    userName: "admin@example.com", // Для админа используем фиксированный email
     sort,
     from: currentPage * pageSize,
     size: pageSize,
@@ -57,10 +60,10 @@ export default function DashboardOrders() {
     setCurrentPage(newPage);
   };
 
-  const orders = response?.data?.orders || [];
+  const orders = response?.data?.items || [];
   const totalPages = Math.ceil(orders.length / pageSize);
 
-  const handleStatusChange = async (orderId: string, newStatus: OrderStatus) => {
+  const handleStatusChange = async (orderId: number, newStatus: OrderStatus) => {
     try {
       await updateStatus({ orderId, status: newStatus });
       toast.success(`Статус заказа #${orderId} изменен на ${newStatus}`);
@@ -70,7 +73,7 @@ export default function DashboardOrders() {
   };
 
   return (
-    <main className="flex flex-col gap-6">
+    <main className="flex flex-col gap-6 h-full">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">Управление заказами</h1>
       </div>
@@ -94,30 +97,31 @@ export default function DashboardOrders() {
         <div className="text-center py-8">Загрузка...</div>
       ) : (
         <>
-          <div className="grid grid-cols-1 gap-6">
+          <div className="grid grid-cols-1 gap-6 overflow-y-auto h-full">
             {orders.map((order: Order) => (
-              <Card key={order.id} className="p-6">
+              <Card key={order.orderId} className="p-6">
                 <div className="flex justify-between items-start mb-4">
                   <div>
-                    <h3 className="text-lg font-semibold mb-2">Заказ #{order.id}</h3>
+                    <h3 className="text-lg font-semibold mb-2">Заказ #{order.orderId}</h3>
                     <p className="text-sm text-gray-500">
                       {format(new Date(order.createdAt), "d MMMM yyyy, HH:mm", { locale: ru })}
                     </p>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className={`px-2 py-1 rounded-full text-sm ${STATUS_COLORS[order.status as OrderStatus]}`}>
+                    <span className={`px-2 py-1 rounded-full text-sm ${STATUS_COLORS[order.status]}`}>
                       {order.status}
                     </span>
                   </div>
                 </div>
 
                 <div className="space-y-4">
-                  {order.items.map((item) => (
-                    <div key={item.menuItemId} className="flex justify-between items-center">
+                  {order.menuLineItems.map((item, index) => (
+                    <div key={index} className="flex justify-between items-center">
                       <div>
-                        <p className="font-medium">Блюдо #{item.menuItemId}</p>
+                        <p className="font-medium">{item.menuItemName}</p>
                         <p className="text-sm text-gray-500">Количество: {item.quantity}</p>
                       </div>
+                      <p className="font-medium">{formatCurrency(item.price)}</p>
                     </div>
                   ))}
                 </div>
@@ -125,23 +129,23 @@ export default function DashboardOrders() {
                 <div className="mt-4 pt-4 border-t">
                   <div className="flex justify-between items-center">
                     <p className="font-medium">Итого:</p>
-                    <p className="text-lg font-bold">{formatCurrency(order.totalAmount)}</p>
+                    <p className="text-lg font-bold">{formatCurrency(order.totalPrice)}</p>
                   </div>
                 </div>
 
                 <div className="mt-4 flex justify-end gap-2">
-                  {order.status === "PENDING" && (
+                  {order.status === "NEW" && (
                     <>
                       <Button
                         variant="outline"
-                        onClick={() => handleStatusChange(order.id, "PROCESSING")}
+                        onClick={() => handleStatusChange(order.orderId, "PROCESSING")}
                         disabled={isUpdating}
                       >
                         Подтвердить
                       </Button>
                       <Button
                         variant="destructive"
-                        onClick={() => handleStatusChange(order.id, "CANCELLED")}
+                        onClick={() => handleStatusChange(order.orderId, "CANCELLED")}
                         disabled={isUpdating}
                       >
                         Отменить
@@ -151,7 +155,7 @@ export default function DashboardOrders() {
                   {order.status === "PROCESSING" && (
                     <Button
                       variant="outline"
-                      onClick={() => handleStatusChange(order.id, "COMPLETED")}
+                      onClick={() => handleStatusChange(order.orderId, "COMPLETED")}
                       disabled={isUpdating}
                     >
                       Завершить

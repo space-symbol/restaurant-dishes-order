@@ -10,12 +10,12 @@ export const meta = () => {
 };
 
 export async function loader({ request }: Route.LoaderArgs) {
-  const featuredDishes = await getMenuItemsWithRatings({ sort: 'RATE_DESC' });
+  const featuredDishes = await getMenuItemsWithRatings({ sortBy: 'RATE_DESC' });
   
   return {
     featuredDishes: {
-      items: featuredDishes.data?.items ?? [],
-      total: featuredDishes.data?.total ?? 0,
+      items: featuredDishes.data ?? [],
+      total: featuredDishes.data?.length ?? 0,
     }
   };
 }

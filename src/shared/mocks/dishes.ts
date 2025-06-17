@@ -31,20 +31,20 @@ export const mockMenuItems: MenuItem[] = [
     featured: true,
     reviews: [
       {
-        reviewId: "1",
-        userId: "1",
-        updatedAt: "2024-03-16T15:30:00Z",
-        rating: 5,
-        comment: "Лучшая карбонара в городе!",
-        createdAt: "2024-03-16T15:30:00Z"
+        id: 1,
+        createdAt: "2024-01-15T10:30:00Z",
+        menuId: 1,
+        createdBy: "user1@example.com",
+        comment: "Отличное блюдо! Очень вкусно.",
+        rate: 5
       },
       {
-        reviewId: "2",
-        userId: "2",
-        updatedAt: "2024-03-17T12:45:00Z",
-        rating: 4,
-        comment: "Очень вкусно, но могло бы быть больше бекона",
-        createdAt: "2024-03-17T12:45:00Z"
+        id: 2,
+        createdAt: "2024-01-14T15:45:00Z",
+        menuId: 1,
+        createdBy: "user2@example.com",
+        comment: "Хорошо, но могло бы быть лучше.",
+        rate: 4
       }
     ]
   },
@@ -63,100 +63,100 @@ export const mockMenuItems: MenuItem[] = [
     new: true,
     reviews: [
       {
-        reviewId: "3",
-        userId: "3",
-        updatedAt: "2024-03-15T19:20:00Z",
-        rating: 5,
+        id: 3,
+        createdAt: "2024-01-15T10:30:00Z",
+        menuId: 2,
+        createdBy: "user3@example.com",
         comment: "Идеальная прожарка и сочность!",
-        createdAt: "2024-03-15T19:20:00Z"
+        rate: 5
       },
       {
-        reviewId: "4",
-        userId: "4",
-        updatedAt: "2024-03-17T12:45:00Z",
-        rating: 4,
+        id: 4,
+        createdAt: "2024-01-14T15:45:00Z",
+        menuId: 2,
+        createdBy: "user4@example.com",
         comment: "Очень вкусно, но могло бы быть больше бекона",
-        createdAt: "2024-03-17T12:45:00Z"
+        rate: 4
       },
       {
-        reviewId: "5",
-        userId: "5",
-        updatedAt: "2024-03-18T10:30:00Z",
-        rating: 3,
+        id: 5,
+        createdAt: "2024-01-13T10:30:00Z",
+        menuId: 2,
+        createdBy: "user5@example.com",
         comment: "Хорошо, но немного суховато",
-        createdAt: "2024-03-18T10:30:00Z"
+        rate: 3
       },
       {
-        reviewId: "6",
-        userId: "6",
-        updatedAt: "2024-03-19T14:15:00Z",
-        rating: 2,
+        id: 6,
+        createdAt: "2024-01-12T14:15:00Z",
+        menuId: 2,
+        createdBy: "user6@example.com",
         comment: "Скучно, не рекомендую",
-        createdAt: "2024-03-19T14:15:00Z"
+        rate: 2
       },
       {
-        reviewId: "7",
-        userId: "7",
-        updatedAt: "2024-03-20T16:40:00Z",
-        rating: 1,
+        id: 7,
+        createdAt: "2024-01-11T16:40:00Z",
+        menuId: 2,
+        createdBy: "user7@example.com",
         comment: "Очень плохо, не понравилось",
-        createdAt: "2024-03-20T16:40:00Z"
+        rate: 1
       },
       {
-        reviewId: "8",
-        userId: "8",
-        updatedAt: "2024-03-20T16:40:00Z",
-        rating: 1,
+        id: 8,
+        createdAt: "2024-01-10T16:40:00Z",
+        menuId: 2,
+        createdBy: "user8@example.com",
         comment: "Очень плохо, не понравилось",
-        createdAt: "2024-03-20T16:40:00Z"
+        rate: 1
       },
       {
-        reviewId: "9",
-        userId: "9",
-        updatedAt: "2024-03-20T16:40:00Z",
-        rating: 1,
+        id: 9,
+        createdAt: "2024-01-09T16:40:00Z",
+        menuId: 2,
+        createdBy: "user9@example.com",
         comment: "Очень плохо, не понравилось",
-        createdAt: "2024-03-20T16:40:00Z"
+        rate: 1
       },
       {
-        reviewId: "10",
-        userId: "10",
-        updatedAt: "2024-03-20T16:40:00Z",
-        rating: 1,
+        id: 10,
+        createdAt: "2024-01-08T16:40:00Z",
+        menuId: 2,
+        createdBy: "user10@example.com",
         comment: "Очень плохо, не понравилось",
-        createdAt: "2024-03-20T16:40:00Z"
+        rate: 1
       },
       {
-        reviewId: "11",
-        userId: "11",
-        updatedAt: "2024-03-20T16:40:00Z",
-        rating: 1,
+        id: 11,
+        createdAt: "2024-01-07T16:40:00Z",
+        menuId: 2,
+        createdBy: "user11@example.com",
         comment: "Очень плохо, не понравилось",
-        createdAt: "2024-03-20T16:40:00Z"
+        rate: 1
       },
       {
-        reviewId: "12",
-        userId: "12",
-        updatedAt: "2024-03-20T16:40:00Z",
-        rating: 1,
+        id: 12,
+        createdAt: "2024-01-06T16:40:00Z",
+        menuId: 2,
+        createdBy: "user12@example.com",
         comment: "Очень плохо, не понравилось",
-        createdAt: "2024-03-20T16:40:00Z"
+        rate: 1
       },
       {
-        reviewId: "13",
-        userId: "13",
-        updatedAt: "2024-03-20T16:40:00Z",
-        rating: 1,
+        id: 13,
+        createdAt: "2024-01-05T16:40:00Z",
+        menuId: 2,
+        createdBy: "user13@example.com",
         comment: "Очень плохо, не понравилось",
-        createdAt: "2024-03-20T16:40:00Z"
+        rate: 1
       },
       {
-        reviewId: "14",
-        userId: "14",
-        updatedAt: "2024-03-20T16:40:00Z",
-        rating: 1,
+        id: 14,
+        createdAt: "2024-01-04T16:40:00Z",
+        menuId: 2,
+        createdBy: "user14@example.com",
         comment: "Очень плохо, не понравилось",
-        createdAt: "2024-03-20T16:40:00Z"
+        rate: 1
       },
     ]
   },
@@ -174,20 +174,20 @@ export const mockMenuItems: MenuItem[] = [
     featured: true,
     reviews: [
       {
-        reviewId: "4",
-        userId: "4",
-        updatedAt: "2024-03-14T13:15:00Z",
-        rating: 4,
+        id: 4,
+        createdAt: "2024-01-15T10:30:00Z",
+        menuId: 3,
+        createdBy: "user4@example.com",
         comment: "Хороший салат, но соуса могло бы быть больше",
-        createdAt: "2024-03-14T13:15:00Z"
+        rate: 4
       },
       {
-        reviewId: "5",
-        userId: "5",
-        updatedAt: "2024-03-15T14:30:00Z",
-        rating: 5,
+        id: 5,
+        createdAt: "2024-01-14T15:45:00Z",
+        menuId: 3,
+        createdBy: "user5@example.com",
         comment: "Очень свежий и вкусный!",
-        createdAt: "2024-03-15T14:30:00Z"
+        rate: 5
       }
     ]
   },
@@ -205,12 +205,12 @@ export const mockMenuItems: MenuItem[] = [
     featured: true,
     reviews: [
       {
-        reviewId: "6",
-        userId: "6",
-        updatedAt: "2024-03-13T16:20:00Z",
-        rating: 5,
+        id: 6,
+        createdAt: "2024-01-15T10:30:00Z",
+        menuId: 4,
+        createdBy: "user6@example.com",
         comment: "Нежнейший десерт, просто тает во рту!",
-        createdAt: "2024-03-13T16:20:00Z"
+        rate: 5
       }
     ]
   },
@@ -228,12 +228,12 @@ export const mockMenuItems: MenuItem[] = [
     new: true,
     reviews: [
       {
-        reviewId: "7",
-        userId: "7",
-        updatedAt: "2024-03-12T18:45:00Z",
-        rating: 5,
+        id: 7,
+        createdAt: "2024-01-15T10:30:00Z",
+        menuId: 5,
+        createdBy: "user7@example.com",
         comment: "Невероятное сочетание вкусов!",
-        createdAt: "2024-03-12T18:45:00Z"
+        rate: 5
       }
     ]
   },
@@ -251,12 +251,12 @@ export const mockMenuItems: MenuItem[] = [
     featured: true,
     reviews: [
       {
-        reviewId: "8",
-        userId: "8",
-        updatedAt: "2024-03-11T19:30:00Z",
-        rating: 5,
+        id: 8,
+        createdAt: "2024-01-15T10:30:00Z",
+        menuId: 6,
+        createdBy: "user8@example.com",
         comment: "Невероятно нежные гребешки, идеальное сочетание с трюфельным пюре",
-        createdAt: "2024-03-11T19:30:00Z"
+        rate: 5
       }
     ]
   },
@@ -274,12 +274,12 @@ export const mockMenuItems: MenuItem[] = [
     new: true,
     reviews: [
       {
-        reviewId: "9",
-        userId: "9",
-        updatedAt: "2024-03-10T20:15:00Z",
-        rating: 5,
+        id: 9,
+        createdAt: "2024-01-15T10:30:00Z",
+        menuId: 7,
+        createdBy: "user9@example.com",
         comment: "Изысканное блюдо, равиоли просто тают во рту",
-        createdAt: "2024-03-10T20:15:00Z"
+        rate: 5
       }
     ]
   },
@@ -297,12 +297,12 @@ export const mockMenuItems: MenuItem[] = [
     featured: true,
     reviews: [
       {
-        reviewId: "10",
-        userId: "10",
-        updatedAt: "2024-03-09T18:45:00Z",
-        rating: 5,
+        id: 10,
+        createdAt: "2024-01-15T10:30:00Z",
+        menuId: 8,
+        createdBy: "user10@example.com",
         comment: "Лучшая утка в городе! Идеальная корочка и сочность",
-        createdAt: "2024-03-09T18:45:00Z"
+        rate: 5
       }
     ]
   },
@@ -320,12 +320,12 @@ export const mockMenuItems: MenuItem[] = [
     new: true,
     reviews: [
       {
-        reviewId: "11",
-        userId: "11",
-        updatedAt: "2024-03-08T17:30:00Z",
-        rating: 4,
+        id: 11,
+        createdAt: "2024-01-15T10:30:00Z",
+        menuId: 9,
+        createdBy: "user11@example.com",
         comment: "Очень свежий и легкий, отличное начало трапезы",
-        createdAt: "2024-03-08T17:30:00Z"
+        rate: 4
       }
     ]
   },
@@ -343,12 +343,12 @@ export const mockMenuItems: MenuItem[] = [
     featured: true,
     reviews: [
       {
-        reviewId: "12",
-        userId: "12",
-        updatedAt: "2024-03-07T16:20:00Z",
-        rating: 5,
+        id: 12,
+        createdAt: "2024-01-15T10:30:00Z",
+        menuId: 10,
+        createdBy: "user12@example.com",
         comment: "Идеальный фондан! Шоколадная сердцевина просто божественна",
-        createdAt: "2024-03-07T16:20:00Z"
+        rate: 5
       }
     ]
   },
@@ -366,12 +366,12 @@ export const mockMenuItems: MenuItem[] = [
     featured: true,
     reviews: [
       {
-        reviewId: "13",
-        userId: "13",
-        updatedAt: "2024-03-06T15:45:00Z",
-        rating: 5,
+        id: 13,
+        createdAt: "2024-01-15T10:30:00Z",
+        menuId: 11,
+        createdBy: "user13@example.com",
         comment: "Невероятно ароматное ризотто, идеальная консистенция",
-        createdAt: "2024-03-06T15:45:00Z"
+        rate: 5
       }
     ]
   }

@@ -32,7 +32,7 @@ export default function MenuItemPage() {
       {hasOrdered && (
         <div className="mt-8">
           <h2 className="text-2xl font-semibold mb-4">Оцените блюдо</h2>
-          <CreateReviewForm menuItemId={id} />
+          <CreateReviewForm menuId={parseInt(id)} />
         </div>
       )}
     </main>

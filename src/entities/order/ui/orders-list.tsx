@@ -2,7 +2,7 @@ import { format } from "date-fns";
 import { ru } from "date-fns/locale";
 import { Card } from "@/shared/ui/card";
 import { formatCurrency } from "@/shared/lib/currency";
-import { Order } from "../model/types/types";
+import { Order } from "../model/schemas";
 
 interface OrdersListProps {
   sort?: "DATE_ASC" | "DATE_DESC";
@@ -24,21 +24,21 @@ export const OrdersList = (props: OrdersListProps) => {
     content = (
       <>
         {orders.map((order) => (
-          <Card key={order.id} className="p-4">
+          <Card key={order.orderId} className="p-4">
             <div className="flex justify-between items-start mb-2">
               <div>
-              <h3 className="font-medium">Заказ #{order.id}</h3>
+              <h3 className="font-medium">Заказ #{order.orderId}</h3>
               <p className="text-sm text-gray-500">
                 {format(new Date(order.createdAt), "d MMMM yyyy, HH:mm", { locale: ru })}
               </p>
             </div>
             <div className="text-right">
-              <p className="font-medium">{formatCurrency(order.totalAmount)}</p>
+              <p className="font-medium">{formatCurrency(order.totalPrice)}</p>
               <p className="text-sm text-gray-500">{order.status}</p>
             </div>
           </div>
           <div className="text-sm text-gray-600">
-            Количество позиций: {order.items.length}
+            Количество позиций: {order.menuLineItems.length}
           </div>
         </Card>
       ))}

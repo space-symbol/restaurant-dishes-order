@@ -1,39 +1,51 @@
 import { HTMLAttributes, useState } from "react";
-import { MenuItemWithRating } from "../model/types/types";
+import { RatedMenuItem } from "@/entities/menu-aggregate";
 import { MenuItemCard } from "./menu-item-card";
 import { Loader } from "@/shared/ui/loader";
 import { cn } from "@/shared/lib/utils";
+import { MenuItemCategory, MenuItemSort } from "../model/schemas";
+import { useMenuItemsWithRatings } from "@/features/menu-aggregate/model/hooks/use-menu-items-with-ratings";
 
 interface MenuListProps extends HTMLAttributes<HTMLDivElement> {
-  items: MenuItemWithRating[];
-  onAddToCart: (item: MenuItemWithRating) => void;
+  items?: RatedMenuItem[];
+  onAddToCart?: (item: RatedMenuItem) => void;
   isLoading?: boolean;
   error?: string;
   className?: string;
   variant?: 'grid' | 'list';
   showPagination?: boolean;
   itemsPerPage?: number;
-  showFeaturedOnly?: boolean;
   isVisible?: boolean;
+  initialCategory?: MenuItemCategory;
+  initialSort?: MenuItemSort;
 }
 
 export const MenuList = (props: MenuListProps) => {
   const {
-    items,
+    items: propItems,
     onAddToCart,
-    isLoading,
-    error,
+    isLoading: propIsLoading,
+    error: propError,
     className,
     variant = 'grid',
     showPagination = false,
     itemsPerPage = 8,
-    showFeaturedOnly = false,
     isVisible = false,
+    initialCategory,
+    initialSort,
     ...otherProps
   } = props;
 
   const [currentPage, setCurrentPage] = useState(1);
 
+  const { data, isLoading: hookIsLoading, error: hookError } = useMenuItemsWithRatings(
+    { category: initialCategory, sort: initialSort },
+    { enabled: !propItems }
+  );
+
+  const isLoading = propIsLoading ?? hookIsLoading;
+  const error = propError ?? (hookError instanceof Error ? hookError.message : hookError ? String(hookError) : null);
+  const items = propItems ?? (data ?? []);
   if (isLoading) {
     return (
       <div className="flex justify-center items-center min-h-[200px]">
@@ -50,16 +62,19 @@ export const MenuList = (props: MenuListProps) => {
     );
   }
 
-  const filteredItems = showFeaturedOnly 
-    ? items.filter(item => item.featured)
-    : items;
+  if (!items.length) {
+    return (
+      <div className="text-center text-gray-500 py-8">
+        <p>Блюд не найдено</p>
+      </div>
+    );
+  }
 
-  const totalPages = Math.ceil(filteredItems.length / itemsPerPage);
+  const totalPages = Math.ceil(items.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const paginatedItems = showPagination
-    ? filteredItems.slice(startIndex, startIndex + itemsPerPage)
-    : filteredItems;
-
+    ? items.slice(startIndex, startIndex + itemsPerPage)
+    : items;
   return (
     <div className={className} {...otherProps}>
       <div className={cn(
@@ -68,7 +83,7 @@ export const MenuList = (props: MenuListProps) => {
           ? "grid-cols-1 xs:grid-cols-2 2xl:grid-cols-4"
           : "grid-cols-1"
       )}>
-        {paginatedItems.map((item, index) => (
+        {paginatedItems.map((item: RatedMenuItem, index: number) => (
           <MenuItemCard
             key={item.id}
             item={item}

@@ -1,46 +1,41 @@
-import { Star } from "lucide-react";
-import { cn } from "../lib/utils";
+import { StarIcon } from "@heroicons/react/24/solid";
+import { useState } from "react";
 
 interface RatingProps {
   rating: number;
+  onRatingChange: (rating: number) => void;
+  maxRating?: number;
   className?: string;
-  size?: "sm" | "md" | "lg";
 }
 
-export const Rating = ({ rating, className, size = "md" }: RatingProps) => {
-  const sizeClasses = {
-    sm: "h-3 w-3",
-    md: "h-4 w-4",
-    lg: "h-5 w-5"
-  };
+export const Rating = ({
+  rating,
+  onRatingChange,
+  maxRating = 5,
+  className = "",
+}: RatingProps) => {
+  const [hoverRating, setHoverRating] = useState(0);
 
   return (
-    <div className={cn("flex items-center gap-0.5", className)}>
-      {[1, 2, 3, 4, 5].map((value) => {
-        const isFilled = value <= rating;
-        const isHalfFilled = value - 0.5 <= rating && rating < value;
-        
-        return (
-          <div key={value} className="relative">
-            <Star
-              className={cn(
-                sizeClasses[size],
-                isFilled ? "text-yellow-400 fill-yellow-400" : "text-gray-300"
-              )}
-            />
-            {isHalfFilled && (
-              <div className="absolute inset-0 overflow-hidden">
-                <Star
-                  className={cn(
-                    sizeClasses[size],
-                    "text-yellow-400 fill-yellow-400"
-                  )}
-                />
-              </div>
-            )}
-          </div>
-        );
-      })}
+    <div className={`flex gap-1 ${className}`}>
+      {[...Array(maxRating)].map((_, i) => (
+        <button
+          key={i}
+          type="button"
+          onClick={() => onRatingChange(i + 1)}
+          onMouseEnter={() => setHoverRating(i + 1)}
+          onMouseLeave={() => setHoverRating(0)}
+          className="focus:outline-none"
+        >
+          <StarIcon
+            className={`w-8 h-8 ${
+              i < (hoverRating || rating)
+                ? "text-yellow-400"
+                : "text-gray-300"
+            }`}
+          />
+        </button>
+      ))}
     </div>
   );
 }; 

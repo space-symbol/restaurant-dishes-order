@@ -2,7 +2,7 @@ import type { ButtonHTMLAttributes, HTMLAttributes } from "react";
 import { cn } from "../lib/utils";
 import { cva, VariantProps } from "class-variance-authority";
  
-const button = cva("select-none cursor-pointer flex items-center justify-center gap-2 flex-nowrap text-nowrap p-2 rounded active:scale-[0.95] transition-transform transition-colors", {
+const button = cva("select-none transition-all cursor-pointer flex items-center justify-center gap-2 flex-nowrap text-nowrap p-2 rounded active:scale-[0.95]", {
   variants: {
     variant: {
       primary: "bg-primary text-primary-foreground",

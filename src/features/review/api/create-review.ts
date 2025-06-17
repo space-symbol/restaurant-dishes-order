@@ -4,16 +4,15 @@ import { reviewSchema } from "@/entities/review/model/schemas";
 import { z } from "zod";
 
 const createReviewSchema = z.object({
-  menuItemId: z.string(),
-  rating: z.number().min(1).max(5),
-  comment: z.string(),
+  menuId: z.number(),
+  rate: z.number().min(1).max(5),
+  comment: z.string().optional(),
 });
 
-type CreateReview = z.infer<typeof createReviewSchema>;
-type Response = z.infer<typeof reviewSchema>;
+type CreateReviewData = z.infer<typeof createReviewSchema>;
 
-export const createReview = createService(async (data: CreateReview) => {
+export const createReview = createService(async (data: CreateReviewData) => {
   const validatedData = createReviewSchema.parse(data);
-  const response = await $api.post<Response>("/v1/reviews", validatedData);
+  const response = await $api.post("/v1/reviews", validatedData);
   return reviewSchema.parse(response.data);
 }); 

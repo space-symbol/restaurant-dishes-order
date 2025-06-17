@@ -1,5 +1,6 @@
 export { useMenuItems } from './model/hooks/use-menu-items';
 export { useMenuItem } from './model/hooks/use-menu-item';
+export { useMenuItemsByIds } from './model/hooks/use-menu-items-by-ids';
 export { useCreateMenuItem } from './model/hooks/use-create-menu-item';
 export { useUpdateMenuItem } from './model/hooks/use-update-menu-item';
 export { useDeleteMenuItem } from './model/hooks/use-delete-menu-item';

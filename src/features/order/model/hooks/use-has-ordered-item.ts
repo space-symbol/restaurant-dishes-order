@@ -6,6 +6,6 @@ export const useHasOrderedItem = (menuItemId: string) => {
   if (!data?.orders) return false;
 
   return data.orders.some((order: Order) => 
-    order.items.some((item: { menuItemId: string }) => item.menuItemId === menuItemId)
+    order.items.some((item: { menuItemName: string }) => item.menuItemName === menuItemId)
   );
 }; 

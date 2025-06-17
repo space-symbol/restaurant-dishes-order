@@ -1,17 +1,15 @@
 import { ZodError } from "zod";
 
 export type ServiceResponse<T> = {
-  data: T | null;
-}
+  data: T;
+};
 
-export function createService<A, R>(service: (args: A) => Promise<R>): (args: A) => Promise<ServiceResponse<R>> {
+export const createService = <A = void, R = any>(service: (args: A) => Promise<R>): (args: A) => Promise<ServiceResponse<R>> => {
   return async (args: A) => {
     try {
       const data = await service(args);
-      console.log(data);
       return { data };
     } catch (error) {
-      console.log(error);
       if (error instanceof ZodError) {
         throw new Error("Ошибка при получении данных");
       } else if (error instanceof Error) {
@@ -20,4 +18,5 @@ export function createService<A, R>(service: (args: A) => Promise<R>): (args: A)
         throw new Error("Неизвестная ошибка");
       }
     }
-  }}
+  };
+};

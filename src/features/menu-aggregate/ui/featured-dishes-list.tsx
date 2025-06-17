@@ -1,9 +1,13 @@
 import { CartItem, useCartStore } from "@/entities/cart";
-import { MenuItemWithRating, MenuList } from "@/entities/menu";
+import { MenuList } from "@/entities/menu";
 import { Loader } from "@/shared/ui/loader";
 import { cn } from "@/shared/lib/utils";
 import { useMenuItemsWithRatings } from "../model/hooks/use-menu-items-with-ratings";
 import type { Route } from "@/app/routes/home/+types/home";
+import { useState } from "react";
+import { MenuItemCategory, MenuItemSort } from "@/entities/menu/model/schemas";
+import { RatedMenuItem } from "@/entities/menu-aggregate/model/schemas";
+import { MenuFilters } from "./menu-filters";
 
 interface DishesListProps {
   isVisible: boolean;
@@ -12,19 +16,19 @@ interface DishesListProps {
 
 export const DishesList = ({ isVisible, initialData }: DishesListProps) => {
   const { addItem } = useCartStore();
+  const [category, setCategory] = useState<MenuItemCategory | undefined>();
+  const [sort, setSort] = useState<MenuItemSort>('RATE_DESC');
+
   const { data: menuItems, isLoading, error } = useMenuItemsWithRatings(
-    { sort: 'RATE_DESC' },
+    { category, sort },
     {
-      initialData: initialData ? {
-        items: initialData.items,
-        total: initialData.total,
-      } : undefined
+      initialData: initialData?.items
     }
   );
 
-  const handleAddToCart = (item: MenuItemWithRating) => {
+  const handleAddToCart = (item: RatedMenuItem) => {
     const cartItem: CartItem = {
-      id: item.id,
+      id: String(item.id),
       name: item.name,
       price: item.price,
       quantity: 1,
@@ -59,17 +63,27 @@ export const DishesList = ({ isVisible, initialData }: DishesListProps) => {
   }
 
   return (
-    <MenuList
-      items={menuItems.items}
-      onAddToCart={handleAddToCart}
-      showPagination={true}
-      itemsPerPage={4}
-      className={cn(
-        "opacity-0",
-        isVisible && "animate-fade-in"
-      )}
-      style={{ animationDelay: "0.4s" }}
-      isVisible={isVisible}
-    />
+    <div className="space-y-8">
+      <MenuFilters
+        category={category}
+        sort={sort}
+        onCategoryChange={setCategory}
+        onSortChange={setSort}
+        className="mx-auto"
+      />
+
+      <MenuList
+        items={menuItems}
+        onAddToCart={handleAddToCart}
+        showPagination={true}
+        itemsPerPage={4}
+        className={cn(
+          "opacity-0",
+          isVisible && "animate-fade-in"
+        )}
+        style={{ animationDelay: "0.4s" }}
+        isVisible={isVisible}
+      />
+    </div>
   );
 }; 
