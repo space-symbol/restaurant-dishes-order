@@ -1,3 +1,28 @@
+// Генерируем даты для сегодня от 8 до 9 утра
+function getTodayMorningTimes(count: number): string[] {
+  const dates: string[] = [];
+  const usedMinutes = new Set<number>();
+  
+  for (let i = 0; i < count; i++) {
+    let minutes: number;
+    do {
+      minutes = Math.floor(Math.random() * 60);
+    } while (usedMinutes.has(minutes));
+    
+    usedMinutes.add(minutes);
+    
+    const today = new Date();
+    const seconds = Math.floor(Math.random() * 60);
+    today.setHours(8, minutes, seconds, 0);
+    
+    dates.push(today.toISOString());
+  }
+  
+  return dates.sort(); // Сортируем по времени
+}
+
+const todayDates = getTodayMorningTimes(10); // Генерируем достаточно дат для всех записей
+
 export const mockMenuItems = [
   {
     id: "1",
@@ -7,7 +32,7 @@ export const mockMenuItems = [
     available: true,
     description: "Классическая итальянская паста с беконом, сливками и пармезаном",
     imageUrl: "https://images.unsplash.com/photo-1612874742237-6526221588e3?w=800&auto=format&fit=crop",
-    createdAt: "2024-03-15T10:00:00Z",
+    createdAt: todayDates[0],
     averageRating: 4.8,
     rating: 156,
     reviews: [
@@ -16,14 +41,14 @@ export const mockMenuItems = [
         rating: 5,
         comment: "Лучшая карбонара в городе!",
         userName: "Анна",
-        createdAt: "2024-03-16T15:30:00Z"
+        createdAt: todayDates[1]
       },
       {
         id: "2",
         rating: 4,
         comment: "Очень вкусно, но могло бы быть больше бекона",
         userName: "Михаил",
-        createdAt: "2024-03-17T12:45:00Z"
+        createdAt: todayDates[2]
       }
     ]
   },
@@ -35,7 +60,7 @@ export const mockMenuItems = [
     available: true,
     description: "Премиальный стейк из мраморной говядины, подается с овощами гриль",
     imageUrl: "https://images.unsplash.com/photo-1546964124-0cce460f38ef?w=800&auto=format&fit=crop",
-    createdAt: "2024-03-14T09:00:00Z",
+    createdAt: todayDates[3],
     averageRating: 4.9,
     rating: 89,
     reviews: [
@@ -44,7 +69,7 @@ export const mockMenuItems = [
         rating: 5,
         comment: "Идеальная прожарка и сочность!",
         userName: "Дмитрий",
-        createdAt: "2024-03-15T19:20:00Z"
+        createdAt: todayDates[4]
       }
     ]
   },
@@ -56,7 +81,7 @@ export const mockMenuItems = [
     available: true,
     description: "Классический салат с куриным филе, хрустящими сухариками и соусом Цезарь",
     imageUrl: "https://images.unsplash.com/photo-1550304943-4f24f54ddde9?w=800&auto=format&fit=crop",
-    createdAt: "2024-03-13T11:00:00Z",
+    createdAt: todayDates[5],
     averageRating: 4.5,
     rating: 203,
     reviews: [
@@ -65,14 +90,14 @@ export const mockMenuItems = [
         rating: 4,
         comment: "Хороший салат, но соуса могло бы быть больше",
         userName: "Елена",
-        createdAt: "2024-03-14T13:15:00Z"
+        createdAt: todayDates[6]
       },
       {
         id: "5",
         rating: 5,
         comment: "Очень свежий и вкусный!",
         userName: "Сергей",
-        createdAt: "2024-03-15T14:30:00Z"
+        createdAt: todayDates[7]
       }
     ]
   }
