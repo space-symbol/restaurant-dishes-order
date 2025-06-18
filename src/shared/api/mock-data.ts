@@ -2,6 +2,7 @@ import { z } from 'zod';
 import { menuItemSchema, MenuItemCategory } from '@/entities/menu/model/schemas';
 import { orderSchema, OrderStatus } from '@/entities/order/model/schemas';
 import { reviewSchema } from '@/entities/review/model/schemas';
+import { getTodayMorningTimes } from '@/shared/lib/date-utils';
 
 export type { MenuItemCategory, OrderStatus };
 
@@ -71,6 +72,9 @@ export interface Tokens {
   refreshToken: string;
 }
 
+// Генерируем даты для сегодня от 8 до 9 утра
+const todayDates = getTodayMorningTimes(20); // Генерируем достаточно дат для всех записей
+
 export const mockMenuItems: MenuItem[] = [
   {
     id: 1,
@@ -81,8 +85,8 @@ export const mockMenuItems: MenuItem[] = [
     timeToCook: 20,
     weight: 150.55,
     imageUrl: 'https://images.unsplash.com/photo-1563245372-f21724e3856d?q=80&w=1000&auto=format&fit=crop',
-    updatedAt: '2023-05-15T12:00:00Z',
-    createdAt: '2023-05-10T10:30:00Z',
+    updatedAt: todayDates[0],
+    createdAt: todayDates[1],
     ingredientCollection: {
       ingredients: [
         { name: 'свинина', quantity: '20 г' },
@@ -99,8 +103,8 @@ export const mockMenuItems: MenuItem[] = [
     timeToCook: 15,
     weight: 250.00,
     imageUrl: 'https://images.unsplash.com/photo-1612874742237-6526221588e3?q=80&w=1000&auto=format&fit=crop',
-    updatedAt: '2023-05-15T12:00:00Z',
-    createdAt: '2023-05-10T10:30:00Z',
+    updatedAt: todayDates[2],
+    createdAt: todayDates[3],
     ingredientCollection: {
       ingredients: [
         { name: 'спагетти', quantity: '200 г' },
@@ -119,8 +123,8 @@ export const mockMenuItems: MenuItem[] = [
     timeToCook: 10,
     weight: 200.00,
     imageUrl: 'https://images.unsplash.com/photo-1550304943-4f24f54ddde9?q=80&w=1000&auto=format&fit=crop',
-    updatedAt: '2023-05-15T12:00:00Z',
-    createdAt: '2023-05-10T10:30:00Z',
+    updatedAt: todayDates[4],
+    createdAt: todayDates[5],
     ingredientCollection: {
       ingredients: [
         { name: 'куриное филе', quantity: '150 г' },
@@ -139,8 +143,8 @@ export const mockMenuItems: MenuItem[] = [
     timeToCook: 5,
     weight: 150.00,
     imageUrl: 'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?q=80&w=1000&auto=format&fit=crop',
-    updatedAt: '2023-05-15T12:00:00Z',
-    createdAt: '2023-05-10T10:30:00Z',
+    updatedAt: todayDates[6],
+    createdAt: todayDates[7],
     ingredientCollection: {
       ingredients: [
         { name: 'маскарпоне', quantity: '200 г' },
@@ -158,8 +162,8 @@ export const mockMenuItems: MenuItem[] = [
     timeToCook: 25,
     weight: 300.00,
     imageUrl: 'https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=1000&auto=format&fit=crop',
-    updatedAt: '2023-05-15T12:00:00Z',
-    createdAt: '2023-05-10T10:30:00Z',
+    updatedAt: todayDates[8],
+    createdAt: todayDates[9],
     ingredientCollection: {
       ingredients: [
         { name: 'говядина рибай', quantity: '250 г' },
@@ -177,8 +181,8 @@ export const mockMenuItems: MenuItem[] = [
     timeToCook: 5,
     weight: 300.00,
     imageUrl: 'https://images.unsplash.com/photo-1551024709-8f23befc6f87?q=80&w=1000&auto=format&fit=crop',
-    updatedAt: '2023-05-15T12:00:00Z',
-    createdAt: '2023-05-10T10:30:00Z',
+    updatedAt: todayDates[10],
+    createdAt: todayDates[11],
     ingredientCollection: {
       ingredients: [
         { name: 'белый ром', quantity: '50 мл' },
@@ -197,8 +201,8 @@ export const mockMenuItems: MenuItem[] = [
     timeToCook: 10,
     weight: 250.00,
     imageUrl: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?q=80&w=1000&auto=format&fit=crop',
-    updatedAt: '2023-05-15T12:00:00Z',
-    createdAt: '2023-05-10T10:30:00Z',
+    updatedAt: todayDates[12],
+    createdAt: todayDates[13],
     ingredientCollection: {
       ingredients: [
         { name: 'яйца', quantity: '2 шт' },
@@ -217,8 +221,8 @@ export const mockMenuItems: MenuItem[] = [
     timeToCook: 8,
     weight: 120.00,
     imageUrl: 'https://images.unsplash.com/photo-1572695157366-5e585ab2b69f?q=80&w=1000&auto=format&fit=crop',
-    updatedAt: '2023-05-15T12:00:00Z',
-    createdAt: '2023-05-10T10:30:00Z',
+    updatedAt: todayDates[14],
+    createdAt: todayDates[15],
     ingredientCollection: {
       ingredients: [
         { name: 'багет', quantity: '100 г' },
@@ -277,7 +281,7 @@ export const mockOrders: Order[] = [
       apartment: 1
     },
     status: 'NEW',
-    createdAt: '2023-05-23T19:21:33.490423'
+    createdAt: todayDates[16]
   },
   {
     id: 2,
@@ -325,7 +329,7 @@ export const mockOrders: Order[] = [
       apartment: 42
     },
     status: 'COMPLETED',
-    createdAt: '2023-05-20T14:30:00.000Z'
+    createdAt: todayDates[17]
   },
   {
     id: 3,
@@ -363,7 +367,7 @@ export const mockOrders: Order[] = [
       apartment: 12
     },
     status: 'PROCESSING',
-    createdAt: '2023-05-22T09:15:00.000Z'
+    createdAt: todayDates[18]
   }
 ];
 
@@ -374,7 +378,7 @@ export const mockReviews: Review[] = [
     createdBy: 'user123',
     comment: 'Очень вкусно!',
     rate: 5,
-    createdAt: '2023-05-15T12:00:00Z'
+    createdAt: todayDates[19]
   },
   {
     id: 2,
@@ -382,7 +386,7 @@ export const mockReviews: Review[] = [
     createdBy: 'user456',
     comment: 'Отличное блюдо, рекомендую!',
     rate: 4,
-    createdAt: '2023-05-16T14:30:00Z'
+    createdAt: todayDates[0]
   },
   {
     id: 3,
@@ -390,7 +394,7 @@ export const mockReviews: Review[] = [
     createdBy: 'user789',
     comment: 'Неплохо, но могло бы быть лучше',
     rate: 3,
-    createdAt: '2023-05-17T09:15:00Z'
+    createdAt: todayDates[1]
   },
   {
     id: 4,
@@ -398,7 +402,7 @@ export const mockReviews: Review[] = [
     createdBy: 'user101',
     comment: 'Ужасно, не рекомендую',
     rate: 1,
-    createdAt: '2023-05-18T16:45:00Z'
+    createdAt: todayDates[2]
   },
   {
     id: 5,
@@ -406,7 +410,7 @@ export const mockReviews: Review[] = [
     createdBy: 'user202',
     comment: 'Просто отлично!',
     rate: 5,
-    createdAt: '2023-05-19T11:20:00Z'
+    createdAt: todayDates[3]
   },
   {
     id: 6,
@@ -414,7 +418,7 @@ export const mockReviews: Review[] = [
     createdBy: 'user303',
     comment: 'Хорошо, но порция маленькая',
     rate: 4,
-    createdAt: '2023-05-20T13:10:00Z'
+    createdAt: todayDates[4]
   },
   {
     id: 7,
@@ -422,7 +426,7 @@ export const mockReviews: Review[] = [
     createdBy: 'user404',
     comment: 'Средненько',
     rate: 2,
-    createdAt: '2023-05-21T15:30:00Z'
+    createdAt: todayDates[5]
   },
   {
     id: 8,
@@ -430,7 +434,7 @@ export const mockReviews: Review[] = [
     createdBy: 'user505',
     comment: 'Лучшее блюдо в ресторане!',
     rate: 5,
-    createdAt: '2023-05-22T18:00:00Z'
+    createdAt: todayDates[6]
   }
 ];
 
