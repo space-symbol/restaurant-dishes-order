@@ -2,7 +2,7 @@ import { z } from "zod";
 import { userSchema } from "@/entities/auth";
 
 const USERS_STORAGE_KEY = "app-users";
-const ADMIN_EMAIL = "admin@restaurant.com";
+const ADMIN_EMAIL = "admin@gmail.com";
 const ADMIN_PASSWORD = "admin123";
 
 // Схема для нового пользователя
