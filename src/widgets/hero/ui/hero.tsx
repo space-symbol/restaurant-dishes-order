@@ -15,16 +15,16 @@ export const Hero = () => {
     >
       <div className="container-custom relative z-10">
         <div className="max-w-3xl text-white">
-          <div className="inline-flex items-center gap-2 bg-restaurant-red/90 px-4 py-2 rounded-full mb-6 opacity-0 animate-fade-in" style={{ animationDelay: "0.2s" }}>
+          <div className="inline-flex items-center gap-2 bg-restaurant-red/90 px-3 sm:px-4 py-2 rounded-full mb-4 sm:mb-6 opacity-0 animate-fade-in" style={{ animationDelay: "0.2s" }}>
             <Package size={16} />
-            <span className="text-sm font-medium">Закажите онлайн с самовывозом</span>
+            <span className="text-xs sm:text-sm font-medium">Закажите онлайн с самовывозом</span>
           </div>
           
-          <h1 className="text-4xl md:text-6xl font-bold mb-6 text-shadow-md opacity-0 animate-fade-in" style={{ animationDelay: "0.4s" }}>
+          <h1 className="text-2xl sm:text-4xl md:text-6xl font-bold mb-4 sm:mb-6 text-shadow-md opacity-0 animate-fade-in" style={{ animationDelay: "0.4s" }}>
             Вкусная Еда,<br />Готовая к Вашему Приходу
           </h1>
           
-          <p className="text-lg md:text-xl mb-8 max-w-2xl text-shadow-sm opacity-0 animate-fade-in" style={{ animationDelay: "0.6s" }}>
+          <p className="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 max-w-2xl text-shadow-sm opacity-0 animate-fade-in" style={{ animationDelay: "0.6s" }}>
             Не ждите! Закажите любимые блюда онлайн и заберите их в удобное для вас время. Свежие, горячие и готовые к подаче.
           </p>
           <Link to={routesConfig.home.menuList.path} variant={"buttonSecondary"}>

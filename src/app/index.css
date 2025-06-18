@@ -64,11 +64,11 @@
   }
   
   .container-custom {
-    @apply container px-2 sm:px-4 md:px-8 lg:px-40 2xl:px-16 mx-auto max-w-9xl;
+    @apply container px-3 sm:px-4 md:px-8 lg:px-40 2xl:px-16 mx-auto max-w-9xl;
   }
 
   .section-padding {
-    @apply py-16 md:py-24;
+    @apply py-12 sm:py-16 md:py-24;
   }
 
   .card-hover {

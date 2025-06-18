@@ -6,6 +6,7 @@ import { useState } from "react";
 import { useAuthStore } from "@/entities/auth";
 import { Button } from "@/shared/ui/button";
 import { routesConfig } from "@/shared/config/routes";
+import { UserInfo } from "@/features/auth/ui/user-info";
 
 interface HeaderProps {
   className?: string;
@@ -25,10 +26,9 @@ const navLinks: NavLink[] = [
   { name: "Контакты", href: routesConfig.home.contact.path },
   { name: "Мои заказы", href: routesConfig.home.orders.path, isPrivate: true },
 ] as const;
-
 export const Header = ({className}: HeaderProps) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { isAuthenticated, logout, user } = useAuthStore();
+  const { isAuthenticated, user } = useAuthStore();
   const isAdmin = user?.role === 'ADMIN';
 
   return (
@@ -68,9 +68,7 @@ export const Header = ({className}: HeaderProps) => {
             </Link>
           )}
           {isAuthenticated ? (
-            <Button onClick={logout} variant="outline">
-              Выйти
-            </Button>
+            <UserInfo />
           ) : (
             <Link to={routesConfig.home.auth.path} variant="button">
               Войти
@@ -94,7 +92,12 @@ export const Header = ({className}: HeaderProps) => {
       {mobileMenuOpen && (
         <nav className="lg:hidden z-50 bg-header border-t absolute top-full left-0 right-0 py-3 sm:py-4 shadow-lg animate-fade-in">
           <div className="container-custom flex flex-col space-y-3 sm:space-y-4">
-            {navLinks.map((link) => (
+            {navLinks.map((link) => {
+              if (link.isPrivate && !isAuthenticated) {
+                return null;
+              }
+              
+              return (
                 <Link 
                   key={link.name}
                   to={link.href} 
@@ -106,7 +109,8 @@ export const Header = ({className}: HeaderProps) => {
                 >
                   {link.name}
                 </Link>
-            ))}
+              );
+            })}
             {isAdmin && (
               <Link 
                 to={routesConfig.home.dashboard.path}
@@ -117,16 +121,10 @@ export const Header = ({className}: HeaderProps) => {
               </Link>
             )}
             {isAuthenticated ? (
-              <Button 
-                onClick={() => {
-                  logout();
-                  setMobileMenuOpen(false);
-                }} 
-                variant="outline" 
-                className="w-full text-sm sm:text-base"
-              >
-                Выйти
-              </Button>
+              <UserInfo 
+                className="w-full py-2" 
+                showLogout={true}
+              />
             ) : (
               <Link 
                 variant="button"

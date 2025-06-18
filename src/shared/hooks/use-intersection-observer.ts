@@ -5,6 +5,13 @@ export const useIntersectionObserver = (options: IntersectionObserverInit = {}) 
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    // Проверяем поддержку Intersection Observer
+    if (!('IntersectionObserver' in window)) {
+      // Fallback для браузеров без поддержки Intersection Observer
+      setIsVisible(true);
+      return;
+    }
+
     const observer = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting) {
         setIsVisible(true);

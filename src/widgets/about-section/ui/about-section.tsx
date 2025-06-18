@@ -29,17 +29,17 @@ export const AboutSection = () => {
     <section id="about" className="section-padding bg-white" ref={sectionRef}>
       <div className="container-custom">
         <div className={cn(
-          "text-center mb-12 opacity-0",
+          "text-center mb-8 sm:mb-12 opacity-0",
           isSectionVisible && "animate-fade-in"
         )} style={{ animationDelay: "0.2s" }}>
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Наша История</h2>
-          <div className="w-20 h-1 bg-restaurant-red mx-auto mb-6"></div>
-          <p className="text-restaurant-gray max-w-3xl mx-auto">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">Наша История</h2>
+          <div className="w-16 sm:w-20 h-1 bg-restaurant-red mx-auto mb-4 sm:mb-6"></div>
+          <p className="text-sm sm:text-base text-restaurant-gray max-w-3xl mx-auto">
             Основанный в 2010 году, Savory уже более десяти лет радует гостей изысканной кухней и незабываемыми гастрономическими впечатлениями.
           </p>
         </div>
 
-        <div className="grid xl:grid-cols-2 gap-12 items-center">
+        <div className="grid xl:grid-cols-2 gap-8 sm:gap-12 items-center">
           <div className={cn(
             "relative opacity-0",
             isSectionVisible && "animate-bounce-in"
@@ -51,9 +51,9 @@ export const AboutSection = () => {
                 className="w-full h-auto object-cover"
               />
             </div>
-            <div className="absolute -bottom-6 -right-6 bg-restaurant-red text-white p-6 rounded-lg shadow-lg hidden md:block animate-float">
-              <p className="text-4xl font-serif font-bold">12+</p>
-              <p className="text-sm uppercase tracking-wider">Лет Опыта</p>
+            <div className="absolute -bottom-6 -right-6 bg-restaurant-red text-white p-4 sm:p-6 rounded-lg shadow-lg hidden md:block animate-float">
+              <p className="text-3xl sm:text-4xl font-serif font-bold">12+</p>
+              <p className="text-xs sm:text-sm uppercase tracking-wider">Лет Опыта</p>
             </div>
           </div>
 
@@ -61,15 +61,15 @@ export const AboutSection = () => {
             "opacity-0",
             isSectionVisible && "animate-fade-in"
           )} style={{ animationDelay: "0.6s" }}>
-            <h3 className="text-2xl md:text-3xl font-bold mb-4 font-serif">Страсть к Кулинарному Совершенству</h3>
-            <p className="text-restaurant-gray mb-6">
+            <h3 className="text-xl sm:text-2xl md:text-3xl font-bold mb-3 sm:mb-4 font-serif">Страсть к Кулинарному Совершенству</h3>
+            <p className="text-sm sm:text-base text-restaurant-gray mb-4 sm:mb-6">
               В Savory наша философия проста: исключительные ингредиенты, приготовленные с заботой и креативностью, подаются в теплой и гостеприимной атмосфере.
             </p>
-            <p className="text-restaurant-gray mb-8">
+            <p className="text-sm sm:text-base text-restaurant-gray mb-6 sm:mb-8">
               Наш шеф-повар, Изабелла Мартинес, привносит свой международный опыт и любовь к местным вкусам в создание меню, которое празднует как традиции, так и инновации. Каждое блюдо создается не просто как еда, а как впечатление, которое запомнится надолго.
             </p>
             
-            <div className="grid sm:grid-cols-2 gap-6">
+            <div className="grid sm:grid-cols-2 gap-4 sm:gap-6">
               {features.slice(0, 2).map((feature, index) => (
                 <div 
                   key={index} 
@@ -83,8 +83,8 @@ export const AboutSection = () => {
                     {feature.icon}
                   </div>
                   <div>
-                    <h4 className="font-medium text-restaurant-dark mb-1">{feature.title}</h4>
-                    <p className="text-sm text-restaurant-gray">{feature.description}</p>
+                    <h4 className="font-medium text-restaurant-dark mb-1 text-sm sm:text-base">{feature.title}</h4>
+                    <p className="text-xs sm:text-sm text-restaurant-gray">{feature.description}</p>
                   </div>
                 </div>
               ))}

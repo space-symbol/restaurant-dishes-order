@@ -32,8 +32,8 @@ const axiosInstance = axios.create({
 	withCredentials: true
 }) as ApiInstance;
 
-export const $api: ApiInstance = axiosInstance;
-// export const $api: ApiInstance = mockApi;
+// export const $api: ApiInstance = axiosInstance;
+export const $api: ApiInstance = mockApi;
 
 if (!isDevelopment && 'interceptors' in $api) {
 	const api = $api as AxiosInstance;

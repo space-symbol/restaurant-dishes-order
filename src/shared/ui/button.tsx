@@ -13,9 +13,9 @@ const button = cva("select-none transition-all cursor-pointer flex items-center 
       link: "underline-offset-4 hover:underline text-primary",
     },
     size: {
-      default: "h-10 py-2 px-4",
-      sm: "h-9 px-2 rounded-md",
-      lg: "h-11 px-8 rounded-md",
+      default: "h-9 sm:h-10 py-2 px-3 sm:px-4 text-sm sm:text-base",
+      sm: "h-8 sm:h-9 px-2 sm:px-3 rounded-md text-xs sm:text-sm",
+      lg: "h-10 sm:h-11 px-6 sm:px-8 rounded-md text-base sm:text-lg",
       icon: "p-1 aspect-square",
     },
   },

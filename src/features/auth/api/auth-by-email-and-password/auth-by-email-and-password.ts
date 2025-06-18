@@ -1,8 +1,8 @@
-import { $api } from "@/shared/api/instance";
 import { createService } from "@/shared/api/create-service";
 import { loginSchema, userSchema } from "@/entities/auth";
 import { ACCESS_TOKEN_KEY } from "../../lib/consts/local-storage";
 import { useAuthStore } from "@/entities/auth";
+import { authenticateUser } from "../manage-users/manage-users";
 import { z } from "zod";
 
 type Login = z.infer<typeof loginSchema>;
@@ -34,35 +34,26 @@ export const authByEmailAndPassword = createService(async ({ email, password }: 
   const validatedData = loginSchema.parse({ email, password });
 
   try {
-    // Быстрая проверка для тестовых пользователей
-    const testUser = Object.values(TEST_USERS).find(u => u.email === email && u.password === password);
-    if (testUser) {
-      const testResponse = {
-        accessToken: `mock-access-token-${testUser.id}`,
-        user: {
-          id: testUser.id,
-          email: testUser.email,
-          role: testUser.role
-        }
-      };
-      
-      localStorage.setItem(ACCESS_TOKEN_KEY, testResponse.accessToken);
-      useAuthStore.getState().setAuth(testResponse.user, testResponse.accessToken);
-      
-      return testResponse;
+    // Используем новую систему аутентификации
+    const authResult = authenticateUser(email, password);
+    
+    if (!authResult) {
+      throw new Error('Неверный email или пароль');
     }
 
-    const response = await $api.post('/auth/login', validatedData);
-    const data = authResponseSchema.parse(response.data);
+    const response = {
+      accessToken: authResult.token,
+      user: authResult.user
+    };
 
-    localStorage.setItem(ACCESS_TOKEN_KEY, data.accessToken);
-    useAuthStore.getState().setAuth(data.user, data.accessToken);
+    localStorage.setItem(ACCESS_TOKEN_KEY, response.accessToken);
+    useAuthStore.getState().setAuth(response.user, response.accessToken);
 
-    return data;
+    return response;
   } catch (error) {
     console.log(error);
     if (error instanceof z.ZodError) {
-      throw new Error('Некорректный ответ от сервера');
+      throw new Error('Некорректные данные для входа');
     }
     
     if (error instanceof Error) {

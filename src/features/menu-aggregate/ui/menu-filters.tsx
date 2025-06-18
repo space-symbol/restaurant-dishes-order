@@ -18,15 +18,15 @@ export const MenuFilters = ({
   className
 }: MenuFiltersProps) => {
   return (
-    <div className={cn("space-y-4", className)}>
+    <div className={cn("space-y-3 sm:space-y-4", className)}>
       <div className="space-y-2">
-        <h3 className="text-sm font-medium text-gray-700">Категории</h3>
-        <div className="flex flex-wrap gap-2">
+        <h3 className="text-xs sm:text-sm font-medium text-gray-700">Категории</h3>
+        <div className="flex flex-wrap gap-1 sm:gap-2">
           {CATEGORY_OPTIONS.map((option) => (
             <label
               key={option.value}
               className={cn(
-                "relative inline-flex items-center px-4 py-2 rounded-full text-sm font-medium cursor-pointer transition-colors",
+                "relative inline-flex items-center px-2 sm:px-4 py-1 sm:py-2 rounded-full text-xs sm:text-sm font-medium cursor-pointer transition-colors",
                 category === option.value || (!category && option.value === 'ALL')
                   ? "bg-restaurant-red text-white"
                   : "bg-gray-100 text-gray-700 hover:bg-gray-200"
@@ -47,13 +47,13 @@ export const MenuFilters = ({
       </div>
 
       <div className="space-y-2">
-        <h3 className="text-sm font-medium text-gray-700">Сортировка</h3>
-        <div className="flex flex-wrap gap-2">
+        <h3 className="text-xs sm:text-sm font-medium text-gray-700">Сортировка</h3>
+        <div className="flex flex-wrap gap-1 sm:gap-2">
           {SORT_OPTIONS.map((option) => (
             <label
               key={option.value}
               className={cn(
-                "relative inline-flex items-center px-4 py-2 rounded-full text-sm font-medium cursor-pointer transition-colors",
+                "relative inline-flex items-center px-2 sm:px-4 py-1 sm:py-2 rounded-full text-xs sm:text-sm font-medium cursor-pointer transition-colors",
                 sort === option.value
                   ? "bg-restaurant-red text-white"
                   : "bg-gray-100 text-gray-700 hover:bg-gray-200"

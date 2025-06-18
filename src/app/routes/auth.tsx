@@ -6,7 +6,8 @@ import { useAuthStore } from "@/entities/auth";
 import { useAppNavigate } from "@/shared/hooks/use-navigate";
 import { useEffect, useLayoutEffect } from "react";
 import { routesConfig } from "@/shared/config/routes";
-
+import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
+import { Info } from "lucide-react";
 
 export function meta({}: Route.MetaArgs) {
   return [

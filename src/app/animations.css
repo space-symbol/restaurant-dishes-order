@@ -13,6 +13,72 @@
     --animate-rotate-in: rotate-in 0.5s ease-out forwards;
   }
 
+  /* Обеспечиваем видимость на мобильных устройствах */
+  @media (max-width: 640px) {
+    .opacity-0 {
+      opacity: 1 !important;
+    }
+    
+    .translate-y-4 {
+      transform: translateY(0) !important;
+    }
+  }
+
+  /* Дополнительные правила для очень маленьких экранов (320px) */
+  @media (max-width: 375px) {
+    .container-custom {
+      padding-left: 0.75rem !important;
+      padding-right: 0.75rem !important;
+    }
+    
+    .text-2xl {
+      font-size: 1.5rem !important;
+      line-height: 2rem !important;
+    }
+    
+    .text-lg {
+      font-size: 1.125rem !important;
+      line-height: 1.75rem !important;
+    }
+    
+    .text-base {
+      font-size: 1rem !important;
+      line-height: 1.5rem !important;
+    }
+    
+    .text-sm {
+      font-size: 0.875rem !important;
+      line-height: 1.25rem !important;
+    }
+    
+    .text-xs {
+      font-size: 0.75rem !important;
+      line-height: 1rem !important;
+    }
+    
+    .px-3 {
+      padding-left: 0.75rem !important;
+      padding-right: 0.75rem !important;
+    }
+    
+    .py-2 {
+      padding-top: 0.5rem !important;
+      padding-bottom: 0.5rem !important;
+    }
+    
+    .gap-3 {
+      gap: 0.75rem !important;
+    }
+    
+    .gap-2 {
+      gap: 0.5rem !important;
+    }
+    
+    .gap-1 {
+      gap: 0.25rem !important;
+    }
+  }
+
   @keyframes slide-in {
     0% {
       transform: translateX(-100%);

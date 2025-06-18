@@ -11,10 +11,16 @@ import "./index.css";
 import { Header } from "@/widgets/header";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Cart } from "@/widgets/cart";
+import { useEffect } from "react";
+import { initializeAuth } from "@/features/auth/api/manage-users/manage-users";
 
 const queryClient = new QueryClient();
 
 export function Layout({ children }: { children: React.ReactNode }) {
+  useEffect(() => {
+    initializeAuth();
+  }, []);
+
   return (
     <html lang="en">
       <head>

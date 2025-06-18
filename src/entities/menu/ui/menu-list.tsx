@@ -78,9 +78,9 @@ export const MenuList = (props: MenuListProps) => {
   return (
     <div className={className} {...otherProps}>
       <div className={cn(
-        "grid gap-4 sm:gap-8",
+        "grid gap-3 sm:gap-4 md:gap-8",
         variant === 'grid' 
-          ? "grid-cols-1 xs:grid-cols-2 2xl:grid-cols-4"
+          ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4"
           : "grid-cols-1"
       )}>
         {paginatedItems.map((item: RatedMenuItem, index: number) => (

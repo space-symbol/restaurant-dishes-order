@@ -300,12 +300,35 @@ export const mockApi: ApiInstance = {
     }
 
     if (url === '/v1/menu-orders' || url === '/menu-orders') {
+      // Вычисляем общую стоимость заказа
+      const totalPrice = Object.entries(data.nameToQuantity).reduce((total, [itemName, quantity]) => {
+        const menuItem = mockMenuItems.find(item => item.name === itemName);
+        return total + (menuItem ? menuItem.price * (quantity as number) : 0);
+      }, 0);
+
+      // Создаем элементы заказа
+      const menuLineItems = Object.entries(data.nameToQuantity).map(([itemName, quantity]) => {
+        const menuItem = mockMenuItems.find(item => item.name === itemName);
+        return {
+          menuItemName: itemName,
+          price: menuItem ? menuItem.price : 0,
+          quantity: quantity as number
+        };
+      });
+
       const newOrder = {
+        id: mockOrders.length + 1,
         orderId: mockOrders.length + 1,
-        ...data,
+        totalPrice: totalPrice,
+        totalAmount: totalPrice,
+        menuLineItems: menuLineItems,
+        items: menuLineItems, // Дублируем для совместимости
+        address: data.address,
         status: 'NEW' as OrderStatus,
         createdAt: new Date().toISOString()
       };
+      
+      console.log('Creating new order:', newOrder);
       mockOrders.push(newOrder);
       return { data: newOrder };
     }

@@ -22,7 +22,11 @@ interface UseAuthOptions {
 export const useAuth = (options: UseAuthOptions) => {
   const { isRegister, onSuccess, onError } = options;
 
-  const {mutate, error, isPending} = useMutation<ServiceResponse<string | { accessToken: string }>, Error, RegisterData | AuthProps>({
+  const {mutate, error, isPending} = useMutation<
+    ServiceResponse<{ accessToken: string; user: any } | { message: string; user: any; accessToken: string }>, 
+    Error, 
+    RegisterData | AuthProps
+  >({
     mutationFn: (data) => isRegister ? register(data) : authByEmailAndPassword(data),
     onSuccess: () => {
       console.log("Authentication successful");

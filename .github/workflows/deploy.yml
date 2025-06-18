@@ -41,8 +41,8 @@ jobs:
           pm2 -v
 
           cd ~/
-          if [ -d "restaurant-frontend-2/.git" ]; then
-            cd restaurant-frontend-2
+          if [ -d "restaurant-frontend/.git" ]; then
+            cd restaurant-frontend
             git config pull.rebase true
             if git ls-remote --exit-code origin master; then
               git pull origin master
@@ -51,15 +51,15 @@ jobs:
               exit 1
             fi
           else
-            git clone git@github.com:${{ github.repository }}.git restaurant-frontend-2
-            cd restaurant-frontend-2
+            git clone git@github.com:${{ github.repository }}.git restaurant-frontend
+            cd restaurant-frontend
           fi
           
           npm ci
           npm run build
           export 
-          if pm2 list | grep -q 'restaurant-frontend-2'; then
-            pm2 restart restaurant-frontend-2
+          if pm2 list | grep -q 'restaurant-frontend'; then
+            pm2 restart restaurant-frontend
           else
-            PORT=3065 pm2 start npm --name "restaurant-frontend-2" -- run start
+            PORT=3003 pm2 start npm --name "restaurant-frontend" -- run start
           fi

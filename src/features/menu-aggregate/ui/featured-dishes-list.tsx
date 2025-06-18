@@ -78,8 +78,8 @@ export const DishesList = ({ isVisible, initialData }: DishesListProps) => {
         showPagination={true}
         itemsPerPage={4}
         className={cn(
-          "opacity-0",
-          isVisible && "animate-fade-in"
+          "opacity-100 sm:opacity-0",
+          isVisible && "sm:animate-fade-in"
         )}
         style={{ animationDelay: "0.4s" }}
         isVisible={isVisible}
